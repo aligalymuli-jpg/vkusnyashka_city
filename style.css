@@ -1,0 +1,722 @@
+/* =========================================
+   БАЗОВЫЕ ПЕРЕМЕННЫЕ И СБРОС
+   ========================================= */
+
+:root {
+    --primary: #ff9a8b;
+    --primary-dark: #ff6a88;
+    --dark: #0a0a0a;
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --gradient: linear-gradient(45deg, #ff9a8b, #ff6a88);
+    --gradient-reverse: linear-gradient(45deg, #ff6a88, #ff9a8b);
+    --gradient-hit: linear-gradient(45deg, #ff416c, #ff4b2b);
+    --gradient-new: linear-gradient(45deg, #2ecc71, #27ae60);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: var(--dark);
+    color: white;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ВИДЕО ФОН
+   ========================================= */
+
+#bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -2;
+    object-fit: cover;
+    opacity: 0.5;
+}
+
+
+/* =========================================
+   ПОЛНЫЙ ПРЕЛОАДЕР
+   ========================================= */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #0a0a0a, #1a1a2e);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: 0.8s;
+}
+
+.loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 154, 139, 0.1);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px 0;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   ШАПКА (HEADER)
+   ========================================= */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 20px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+}
+
+nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    font-family: 'Marck Script', cursive;
+    font-size: 1.8rem;
+    color: white;
+    text-shadow: 0 0 10px rgba(255, 154, 139, 0.5);
+}
+
+.brand span {
+    color: var(--primary);
+}
+
+.nav-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    color: white;
+    font-size: 1.4rem;
+    text-decoration: none;
+    position: relative;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 154, 139, 0.3);
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.nav-btn:hover {
+    background: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 154, 139, 0.5);
+}
+
+#cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.7rem;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   СЕКЦИЯ HERO
+   ========================================= */
+
+.hero {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 154, 139, 0.3);
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero h1 {
+    font-family: 'Marck Script', cursive;
+    font-size: 4.5rem;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255, 154, 139, 0.7);
+}
+
+.hero-line {
+    width: 150px;
+    height: 3px;
+    background: var(--gradient);
+    margin: 20px auto;
+    border-radius: 2px;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 20px;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   ОСНОВНОЙ КОНТЕНТ (МЕНЮ)
+   ========================================= */
+
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
+
+.section-title {
+    text-align: center;
+    font-family: 'Marck Script', cursive;
+    font-size: 3rem;
+    color: var(--primary);
+    margin: 40px 0 20px;
+    text-shadow: 0 0 15px rgba(255, 154, 139, 0.5);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+
+/* КАТЕГОРИИ */
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 40px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .categories {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+}
+
+.cat-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    /* Темный фон */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 25px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(10px);
+    min-height: 140px;
+}
+
+.cat-btn:hover,
+.cat-btn.active {
+    background: var(--gradient);
+    /* Теперь активная категория светится полностью */
+    border-color: transparent;
+    transform: scale(1.05);
+}
+
+.cat-icon {
+    font-size: 2rem;
+    /* Чуть меньше иконки */
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+}
+
+.cat-btn span {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+/* КАРТОЧКИ ТОВАРОВ (GRID) */
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 60px;
+    /* --- ДОБАВЛЯЕМ ЭТО --- */
+    background: rgba(0, 0, 0, 0.5);
+    /* Темная подложка */
+    padding: 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(15px);
+    /* Размытие фона под сеткой */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) {
+    .menu-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+}
+
+
+/* Обновленная карточка товара */
+
+.product-card {
+    background: rgba(25, 25, 25, 0.8);
+    /* Плотный темный цвет */
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 154, 139, 0.4);
+    /* Яркая рамка */
+    backdrop-filter: blur(5px);
+    transition: all 0.3s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary);
+    background: rgba(255, 154, 139, 0.05);
+    /* Легкий оттенок при наведении */
+    box-shadow: 0 20px 40px rgba(255, 154, 139, 0.2);
+}
+
+
+/* Область изображения */
+
+.product-image {
+    height: 160px;
+    background: rgba(255, 255, 255, 0.05);
+    /* Отделяем зону картинки */
+    margin: 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+}
+
+
+/* Инфо-блок внутри карточки */
+
+.product-info {
+    padding: 20px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    /* --- ДОБАВЛЯЕМ ЭТО --- */
+    background: rgba(0, 0, 0, 0.6);
+    /* Черный фон специально под текстом */
+}
+
+.product-info h3 {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 5px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.product-price {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.btn-sm {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-sm:hover {
+    background: var(--gradient-reverse);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 154, 139, 0.4);
+}
+
+.btn-sm:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================
+   МОДАЛЬНЫЕ ОКНА
+   ========================================= */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 5000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.modal-card {
+    background: rgba(30, 30, 30, 0.95);
+    width: 90%;
+    max-width: 450px;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+    overflow: hidden;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+    transition: color 0.3s;
+    background: none;
+    border: none;
+}
+
+.close-btn:hover {
+    color: var(--primary);
+}
+
+.modal-image {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(45deg, rgba(255, 224, 178, 0.2), rgba(255, 204, 128, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: var(--primary);
+}
+
+.modal-info {
+    padding: 25px;
+}
+
+#modalName {
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.modal-count {
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#modalDesc {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-footer-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+#modalPrice {
+    color: var(--primary);
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   КОНТАКТЫ И ФУТЕР
+   ========================================= */
+
+#location {
+    margin-top: 40px;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 154, 139, 0.2);
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+}
+
+.info-item {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.info-item i {
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.info-item p {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.social-icon {
+    font-size: 2.5rem;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+}
+
+.social-icon:hover {
+    transform: translateY(-5px) scale(1.1);
+    border-color: var(--primary);
+}
+
+.wa {
+    color: #25d366;
+}
+
+.ig {
+    color: #e4405f;
+}
+
+
+/* =========================================
+   ДОПОЛНИТЕЛЬНЫЕ ЭЛЕМЕНТЫ
+   ========================================= */
+
+
+/* Анимация появления товаров */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Кастомный скроллбар */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient);
+    border-radius: 10px;
+}
+
+
+/* Поля ввода */
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 14px;
+    margin: 8px 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 154, 139, 0.3);
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(255, 154, 139, 0.3);
+}
+
+
+/* Адаптивность */
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 3rem;
+    }
+    .hero p {
+        font-size: 1.1rem;
+    }
+    .section-title {
+        font-size: 2.5rem;
+    }
+    .cat-btn {
+        min-height: 120px;
+        padding: 20px 10px;
+    }
+    .cat-icon {
+        font-size: 2.5rem;
+    }
+    .categories {
+        gap: 10px;
+    }
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand {
+        font-size: 1.4rem;
+    }
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    .hero-content {
+        padding: 20px;
+    }
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .social-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+    }
+    .categories {
+        grid-template-columns: 1fr;
+    }
+}

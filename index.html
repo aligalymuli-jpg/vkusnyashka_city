@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vkusnyashak City - Кондитерская</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="preloader">
+        <div class="loader-content">
+            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 4rem;">Vkusnyashak City</h2>
+            <div class="spinner"></div>
+            <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА МЕНЮ...</p>
+        </div>
+    </div>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="фонвидио.mp4" type="video/mp4">
+        Ваш браузер не поддерживает видео.
+    </video>
+
+    <header>
+        <nav>
+            <div class="brand">Vkusnyashak City<span> 🍰</span></div>
+            <div class="nav-controls">
+                <a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i></a>
+                <div class="nav-btn" onclick="sendOrder()" style="cursor:pointer;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-count">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Свежеиспеченное счастье</h1>
+            <div class="hero-line"></div>
+            <p>Авторская выпечка, изысканное печенье и декадентские десерты, приготовленные ежедневно с любовью из лучших ингредиентов.</p>
+        </div>
+    </section>
+
+    <main class="wrapper">
+        <section id="menu-section">
+            <h2 class="section-title">Наше меню</h2>
+            <p class="section-subtitle">Выберите категорию, чтобы увидеть все доступные товары</p>
+
+            <div class="categories" id="categories-screen">
+                <button class="cat-btn" onclick="filterCat('all', this)">
+                    <div class="cat-icon">⭐</div>
+                    <span>Все товары</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('cakes', this)">
+                    <div class="cat-icon">🎂</div>
+                    <span>Торты</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('cookies', this)">
+                    <div class="cat-icon">🍪</div>
+                    <span>Печенье</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('croissants', this)">
+                    <div class="cat-icon">🥐</div>
+                    <span>Круассаны</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('desserts', this)">
+                    <div class="cat-icon">🍮</div>
+                    <span>Десерты</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('cupcakes', this)">
+                    <div class="cat-icon">🧁</div>
+                    <span>Капкейки</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('pies', this)">
+                    <div class="cat-icon">🥧</div>
+                    <span>Пироги</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('drinks', this)">
+                    <div class="cat-icon">☕</div>
+                    <span>Напитки</span>
+                </button>
+            </div>
+
+            <div class="menu-grid" id="menu-container">
+                <!-- Товары будут загружены через JS -->
+            </div>
+        </section>
+
+        <section id="location">
+            <h2 class="section-title">Контакты</h2>
+            <div class="info-card">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>г. Астана, Доставка и Самовывоз</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <p>Ежедневно: 8:00 — 22:00</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+7 (495) 123-45-67</p>
+                </div>
+                <div class="social-links">
+                    <a href="https://wa.me/77771234567" class="social-icon wa">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="productModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-card">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-image" id="modalImg"></div>
+            <div class="modal-info">
+                <h2 id="modalName"></h2>
+                <div class="modal-count" id="modalCount"></div>
+                <p id="modalDesc"></p>
+                <div id="upsell-container"></div>
+                <div class="modal-footer-flex">
+                    <span id="modalPrice"></span>
+                    <button id="modalAddBtn" class="btn-sm">В КОРЗИНУ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal-overlay" onclick="if(event.target === this) closeOrderModal()">
+        <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
+            <span class="close-btn" onclick="closeOrderModal()">&times;</span>
+            <div class="modal-info">
+                <h2 style="color: #ff9a8b; margin-bottom: 20px; text-align: center;">Ваш заказ</h2>
+
+                <div id="cart-content"></div>
+
+                <div id="cart-footer" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                    <div id="total-price" style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 20px; color: #ff9a8b;"></div>
+
+                    <h3 style="font-size: 1rem; margin-bottom: 10px; color: #fff;">Данные для доставки:</h3>
+                    <input type="text" id="order-address" placeholder="Адрес доставки (Улица, дом, кв)">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                        <span style="font-size: 0.8rem; opacity: 0.7;">Приборов:</span>
+                        <input type="number" id="order-persons" value="1" min="1" style="width: 80px;">
+                    </div>
+                    <button onclick="confirmAndSendOrder()" class="btn-sm" style="margin-top: 20px; font-size: 1rem;">
+                        <i class="fab fa-whatsapp"></i> ПОДТВЕРДИТЬ В WHATSAPP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
