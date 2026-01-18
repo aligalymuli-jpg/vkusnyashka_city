@@ -4,32 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vkusnyashak City - Кондитерская</title>
+    <title>Vkusnyashak City | Кондитерская Алматы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 
 <body>
     <div id="preloader">
         <div class="loader-content">
-            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 4rem;">Vkusnyashak City</h2>
+            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 3.5rem;">Vkusnyashak City</h2>
             <div class="spinner"></div>
             <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА МЕНЮ...</p>
         </div>
     </div>
 
-    <video id="bg-video" autoplay muted loop playsinline poster="img/poster.jpg">
-    <source src="bg-video.mp4" type="video/mp4">
-    Ваш браузер не поддерживает видео.
-</video>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
 
     <header>
         <nav>
             <div class="brand">Vkusnyashak City<span> 🍰</span></div>
             <div class="nav-controls">
                 <a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i></a>
-                <div class="nav-btn" onclick="sendOrder()" style="cursor:pointer;">
+                <div class="nav-btn" onclick="openCartModal()" style="cursor:pointer;">
                     <i class="fas fa-shopping-cart"></i>
                     <span id="cart-count">0</span>
                 </div>
@@ -39,86 +38,103 @@
 
     <section class="hero">
         <div class="hero-content">
-            <h1>Свежеиспеченное счастье</h1>
+            <h1>Vkusnyashak City</h1>
             <div class="hero-line"></div>
-            <p>Авторская выпечка, изысканное печенье и декадентские десерты, приготовленные ежедневно с любовью из лучших ингредиентов.</p>
+            <p>Свежеиспеченное счастье каждый день</p>
         </div>
     </section>
 
     <main class="wrapper">
         <section id="menu-section">
-            <h2 class="section-title">Наше меню</h2>
-            <p class="section-subtitle">Выберите категорию, чтобы увидеть все доступные товары</p>
+            <h2 class="section-title">Наше Меню</h2>
+            <div id="work-status-badge" style="text-align: center; margin-bottom: 25px; font-weight: 600;"></div>
 
             <div class="categories" id="categories-screen">
-                <button class="cat-btn" onclick="filterCat('all', this)">
-                    <div class="cat-icon">⭐</div>
-                    <span>Все товары</span>
-                </button>
-
                 <button class="cat-btn" onclick="filterCat('cakes', this)">
-                    <div class="cat-icon">🎂</div>
+                    <img src="img/cat_cakes.webp" alt="Торты">
                     <span>Торты</span>
                 </button>
 
                 <button class="cat-btn" onclick="filterCat('cookies', this)">
-                    <div class="cat-icon">🍪</div>
+                    <img src="img/cat_cookies.webp" alt="Печенье">
                     <span>Печенье</span>
                 </button>
 
                 <button class="cat-btn" onclick="filterCat('croissants', this)">
-                    <div class="cat-icon">🥐</div>
+                    <img src="img/cat_croissants.webp" alt="Круассаны">
                     <span>Круассаны</span>
                 </button>
 
                 <button class="cat-btn" onclick="filterCat('desserts', this)">
-                    <div class="cat-icon">🍮</div>
+                    <img src="img/cat_desserts.webp" alt="Десерты">
                     <span>Десерты</span>
                 </button>
 
                 <button class="cat-btn" onclick="filterCat('cupcakes', this)">
-                    <div class="cat-icon">🧁</div>
+                    <img src="img/cat_cupcakes.webp" alt="Капкейки">
                     <span>Капкейки</span>
                 </button>
 
                 <button class="cat-btn" onclick="filterCat('pies', this)">
-                    <div class="cat-icon">🥧</div>
+                    <img src="img/cat_pies.webp" alt="Пироги">
                     <span>Пироги</span>
                 </button>
 
+                <button class="cat-btn" onclick="filterCat('bread', this)">
+                    <img src="img/cat_bread.webp" alt="Хлеб">
+                    <span>Хлеб</span>
+                </button>
+
                 <button class="cat-btn" onclick="filterCat('drinks', this)">
-                    <div class="cat-icon">☕</div>
+                    <img src="img/cat_drinks.webp" alt="Напитки">
                     <span>Напитки</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('sauces', this)">
+                    <img src="img/cat_sauces.webp" alt="Соусы">
+                    <span>Соусы</span>
+                </button>
+
+                <button class="cat-btn" onclick="filterCat('sets', this)">
+                    <img src="img/cat_sets.webp" alt="Сеты">
+                    <span>Сеты и комбо</span>
                 </button>
             </div>
 
-            <div class="menu-grid" id="menu-container">
-                <!-- Товары будут загружены через JS -->
+            <div id="menu-screen" style="display: none;">
+                <button onclick="showCategories()" style="background: #ff9a8b; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; cursor: pointer; width: 100%; font-family: 'Montserrat', sans-serif;">
+                    <i class="fas fa-arrow-left"></i> НАЗАД К КАТЕГОРИЯМ
+                </button>
+                <h3 id="current-category-title" style="text-align: center; color: #ff9a8b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px;"></h3>
+
+                <div id="type-filters" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; padding: 0 10px;"></div>
+
+                <div class="search-container" style="max-width: 500px; margin: 0 auto 30px; padding: 0;">
+                    <div style="position: relative;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; color: white;"></i>
+                        <input type="text" id="menu-search" placeholder="Поиск в этой категории..." oninput="searchMenu()" style="width: 100%; padding: 14px 14px 14px 45px; border-radius: 15px; border: 1px solid rgba(255, 154, 139, 0.3); background: rgba(255,255,255,0.08); color: white; outline: none; font-family: 'Montserrat', sans-serif;">
+                    </div>
+                </div>
+
+                <div class="menu-grid" id="menu-container"></div>
             </div>
         </section>
 
         <section id="location">
             <h2 class="section-title">Контакты</h2>
             <div class="info-card">
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>г. Астана, Доставка и Самовывоз</p>
+                <div class="info-item"><i class="fas fa-map-marker-alt"></i>
+                    <p>г. Алматы, Доставка и Самовывоз</p>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-clock"></i>
+                <div class="info-item"><i class="fas fa-clock"></i>
                     <p>Ежедневно: 8:00 — 22:00</p>
                 </div>
-                <div class="info-item">
-                    <i class="fas fa-phone"></i>
-                    <p>+7 (495) 123-45-67</p>
+                <div class="info-item"><i class="fas fa-phone"></i>
+                    <p>+7 (777) 123-45-67</p>
                 </div>
                 <div class="social-links">
-                    <a href="https://wa.me/77771234567" class="social-icon wa">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig">
-                        <i class="fab fa-instagram"></i>
-                    </a>
+                    <a href="https://wa.me/77771234567" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </section>
@@ -126,24 +142,24 @@
 
     <div id="productModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-card">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <div class="modal-image" id="modalImg"></div>
+            <span class="close-btn" onclick="document.getElementById('productModal').style.display='none'">&times;</span>
+            <img id="modalImg" src="">
             <div class="modal-info">
                 <h2 id="modalName"></h2>
-                <div class="modal-count" id="modalCount"></div>
+                <div id="modalCount"></div>
                 <p id="modalDesc"></p>
                 <div id="upsell-container"></div>
-                <div class="modal-footer-flex">
-                    <span id="modalPrice"></span>
-                    <button id="modalAddBtn" class="btn-sm">В КОРЗИНУ</button>
+                <div class="modal-footer-flex" style="display:flex; justify-content: space-between; align-items: center; margin-top:20px;">
+                    <span id="modalPrice" style="color: #ff9a8b; font-size: 1.5rem; font-weight: bold;"></span>
+                    <button id="modalAddBtn" class="btn-sm" style="width: auto; padding: 12px 30px;">В КОРЗИНУ</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="orderModal" class="modal-overlay" onclick="if(event.target === this) closeOrderModal()">
+    <div id="cartModal" class="modal-overlay" onclick="if(event.target === this) this.style.display='none'">
         <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
-            <span class="close-btn" onclick="closeOrderModal()">&times;</span>
+            <span class="close-btn" onclick="document.getElementById('cartModal').style.display='none'">&times;</span>
             <div class="modal-info">
                 <h2 style="color: #ff9a8b; margin-bottom: 20px; text-align: center;">Ваш заказ</h2>
 
@@ -154,11 +170,12 @@
 
                     <h3 style="font-size: 1rem; margin-bottom: 10px; color: #fff;">Данные для доставки:</h3>
                     <input type="text" id="order-address" placeholder="Адрес доставки (Улица, дом, кв)">
+                    <input type="tel" id="order-phone" placeholder="Ваш телефон" style="margin-top: 10px; width: 100%;">
                     <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
                         <span style="font-size: 0.8rem; opacity: 0.7;">Приборов:</span>
                         <input type="number" id="order-persons" value="1" min="1" style="width: 80px;">
                     </div>
-                    <button onclick="confirmAndSendOrder()" class="btn-sm" style="margin-top: 20px; font-size: 1rem;">
+                    <button onclick="confirmAndSendOrder()" class="btn-sm" style="margin-top: 20px; font-size: 1rem; width: 100%;">
                         <i class="fab fa-whatsapp"></i> ПОДТВЕРДИТЬ В WHATSAPP
                     </button>
                 </div>
@@ -168,7 +185,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=3.0"></script>
 </body>
 
 </html>
