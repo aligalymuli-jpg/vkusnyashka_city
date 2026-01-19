@@ -1,4 +1,4 @@
-// Firebase конфигурация для Vkusnyashak City
+// Конфигурация Firebase (используй свои ключи)
 const firebaseConfig = {
     apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
     authDomain: "vkusnyashka-final.firebaseapp.com",
@@ -6,26 +6,25 @@ const firebaseConfig = {
     projectId: "vkusnyashka-final"
 };
 
-// Инициализация Firebase
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const database = firebase.database();
-
 // Глобальные переменные
 let products = [];
 let cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
 let currentCategory = 'all';
+let database = null;
 
-// Загрузка данных
-document.addEventListener('DOMContentLoaded', () => {
-    loadData();
-    updateCart();
-});
+// Инициализация Firebase
+function initFirebase() {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    database = firebase.database();
+    return database;
+}
 
-// Загрузка данных из Firebase
+// Основная функция загрузки
 async function loadData() {
     try {
+        initFirebase();
         const snapshot = await database.ref('products').once('value');
         const data = snapshot.val();
 
@@ -33,7 +32,7 @@ async function loadData() {
             products = Object.keys(data).map(key => ({
                 ...data[key],
                 id: key
-            }));
+            })).filter(p => p.available !== false);
         } else {
             products = getDemoProducts();
         }
@@ -41,10 +40,13 @@ async function loadData() {
         updateUI();
         hidePreloader();
         checkWorkStatus();
+        startHeavyAssets();
+        renderMenu();
 
     } catch (error) {
-        console.error("Ошибка загрузки данных:", error);
+        console.error("Ошибка загрузки:", error);
         hidePreloader();
+        showNotification("Ошибка загрузки данных", "error");
     }
 }
 
@@ -57,11 +59,60 @@ function hidePreloader() {
     }
 }
 
+// Анимация снега (декоративная)
+function initSnow() {
+    if (!document.getElementById('snow-effect')) {
+        const style = document.createElement('style');
+        style.id = 'snow-effect';
+        style.textContent = `
+            @keyframes fall {
+                to { transform: translateY(100vh); }
+            }
+            .snowflake {
+                position: fixed;
+                top: -10px;
+                z-index: 9999;
+                pointer-events: none;
+                opacity: 0.7;
+                animation: fall linear forwards;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Создаем снежинки
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const flake = document.createElement('div');
+            flake.className = 'snowflake';
+            flake.innerHTML = '❄';
+            flake.style.cssText = `
+                left: ${Math.random() * 100}vw;
+                font-size: ${Math.random() * 10 + 10}px;
+                animation-duration: ${Math.random() * 5 + 5}s;
+                animation-delay: ${Math.random() * 5}s;
+            `;
+            document.body.appendChild(flake);
+            setTimeout(() => flake.remove(), 10000);
+        }, i * 200);
+    }
+}
+
+// Запуск тяжелых ресурсов
+function startHeavyAssets() {
+    const video = document.getElementById('bg-video');
+    if (video) {
+        video.load();
+        video.play().catch(e => console.log("Автовоспроизведение видео заблокировано"));
+    }
+    initSnow();
+}
+
 // Показать категории
 window.showCategories = function() {
     const catScreen = document.getElementById('categories-screen');
     const menuScreen = document.getElementById('menu-screen');
-    if (catScreen) catScreen.style.display = 'flex';
+    if (catScreen) catScreen.style.display = 'grid';
     if (menuScreen) menuScreen.style.display = 'none';
 };
 
@@ -76,37 +127,76 @@ window.filterCat = function(cat, btn) {
     if (menuScreen) menuScreen.style.display = 'block';
 
     document.getElementById('current-category-title').innerText = title;
-
-    const searchInput = document.getElementById('menu-search');
-    if (searchInput) searchInput.value = '';
-
+    document.getElementById('menu-search').value = '';
+    renderTypeFilters(cat);
     renderMenu(cat);
+
     window.scrollTo({
         top: document.getElementById('menu-section').offsetTop - 20,
         behavior: 'smooth'
     });
 };
 
+// Рендер фильтров по типу
+function renderTypeFilters(cat) {
+    const filterContainer = document.getElementById('type-filters');
+    if (!filterContainer) return;
+    filterContainer.innerHTML = '';
+
+    const catProducts = products.filter(p => p.cat === cat);
+    const types = [...new Set(catProducts.map(p => p.type).filter(t => t))];
+
+    if (types.length > 0) {
+        const btnAll = document.createElement('button');
+        btnAll.className = 'type-btn active';
+        btnAll.innerText = 'Все';
+        btnAll.onclick = () => {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btnAll.classList.add('active');
+            renderMenu(cat);
+        };
+        filterContainer.appendChild(btnAll);
+
+        types.forEach(type => {
+            const btn = document.createElement('button');
+            btn.className = 'type-btn';
+            btn.innerText = getTypeName(type);
+            btn.onclick = () => {
+                document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filtered = catProducts.filter(p => p.type === type);
+                renderMenu(null, filtered);
+            };
+            filterContainer.appendChild(btn);
+        });
+    }
+}
+
+function getTypeName(type) {
+    const typeNames = {
+        'classic': '🍰 Классические',
+        'seasonal': '🍂 Сезонные',
+        'vegan': '🌱 Веганские',
+        'glutenfree': '🌾 Без глютена',
+        'sugarfree': '🍬 Без сахара'
+    };
+    return typeNames[type] || type;
+}
+
 // Рендер меню
-window.renderMenu = function(category = 'all') {
+window.renderMenu = function(category = 'all', filteredData = null) {
     const container = document.getElementById('menu-container');
     if (!container) return;
 
     container.innerHTML = '';
-
-    let dataToRender = category === 'all' ?
-        products :
-        products.filter(p => p.category === category || p.cat === category);
-
-    // Фильтруем только доступные товары
-    dataToRender = dataToRender.filter(p => p.available !== false);
+    let dataToRender = filteredData ? filteredData :
+        (category === 'all' ? products : products.filter(p => p.cat === category));
 
     if (dataToRender.length === 0) {
         container.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px;">
                 <i class="fas fa-cookie-bite" style="font-size: 3rem; color: #ff9a8b; margin-bottom: 15px; opacity: 0.5;"></i>
                 <p style="color: rgba(255, 255, 255, 0.7);">В этой категории пока нет товаров</p>
-                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; margin-top: 5px;">Скоро добавим что-то вкусненькое!</p>
             </div>
         `;
         return;
@@ -155,12 +245,12 @@ window.openDetails = function(id) {
     const upsellContainer = document.getElementById('upsell-container');
     upsellContainer.innerHTML = '';
 
-    // Дополнительные товары (например, напитки к десертам)
+    // Дополнительные товары
     let extraItems = [];
-    if (p.category === 'desserts' || p.cat === 'desserts') {
+    if (p.cat === 'desserts' || p.cat === 'cakes') {
         extraItems = products.filter(item =>
-            (item.category === 'drinks' || item.cat === 'drinks') &&
-            item.available !== false
+            item.cat === 'drinks' &&
+            item.id !== id
         ).slice(0, 3);
     }
 
@@ -201,7 +291,15 @@ window.addToCart = function(id, btnElement = null) {
     cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
     const p = products.find(i => i.id === id);
 
-    if (!p) return;
+    if (!p) {
+        showNotification("Товар не найден", "error");
+        return;
+    }
+
+    if (p.available === false) {
+        showNotification("Этот товар временно недоступен", "warning");
+        return;
+    }
 
     const existingItem = cart.find(i => i.id === id);
 
@@ -228,22 +326,26 @@ window.addToCart = function(id, btnElement = null) {
         setTimeout(() => {
             btnElement.innerHTML = oldText;
             btnElement.style.background = "";
-        }, 800);
+        }, 1500);
     }
 
-    // Показываем уведомление
     showNotification(`${p.name} добавлен в корзину!`);
 };
 
-// Показать уведомление
-function showNotification(message) {
-    // Создаем элемент уведомления
+// Уведомления
+function showNotification(message, type = "success") {
+    const colors = {
+        success: "linear-gradient(45deg, #2ecc71, #27ae60)",
+        error: "linear-gradient(45deg, #e74c3c, #c0392b)",
+        warning: "linear-gradient(45deg, #f39c12, #e67e22)"
+    };
+
     const notification = document.createElement('div');
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
-        background: linear-gradient(45deg, #ff9a8b, #ff6a88);
+        background: ${colors[type] || colors.success};
         color: white;
         padding: 15px 25px;
         border-radius: 10px;
@@ -259,41 +361,42 @@ function showNotification(message) {
 
     document.body.appendChild(notification);
 
-    // Удаляем через 2 секунды
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => notification.remove(), 300);
-    }, 2000);
+    }, 3000);
+
+    // Добавляем стили для анимации
+    if (!document.getElementById('notification-styles')) {
+        const style = document.createElement('style');
+        style.id = 'notification-styles';
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
-// Добавляем стили для анимации
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Обновление корзины
+// Обновление интерфейса
 function updateUI() {
     cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
     const cartCount = document.getElementById('cart-count');
@@ -308,9 +411,10 @@ function updateUI() {
 // Сохранение корзины
 window.saveCart = function() {
     localStorage.setItem('vkusnyashak_cart', JSON.stringify(cart));
+    updateUI();
 };
 
-// Изменение количества в корзине
+// Изменение количества
 window.changeQty = function(index, delta) {
     cart[index].quantity += delta;
 
@@ -319,20 +423,17 @@ window.changeQty = function(index, delta) {
     }
 
     saveCart();
-    updateUI();
-
     if (document.getElementById('cart-content')) {
         renderCart();
     }
 };
 
-// Рендер корзины в модальном окне
+// Рендер корзины
 window.renderCart = function() {
     const container = document.getElementById('cart-content');
-    const totalPrice = document.getElementById('total-price');
+    const footer = document.getElementById('cart-footer');
 
     if (!container) return;
-
     cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
 
     if (cart.length === 0) {
@@ -343,9 +444,11 @@ window.renderCart = function() {
                 <p style="opacity: 0.5; margin-top: 10px;">Добавьте товары из меню</p>
             </div>
         `;
+        if (footer) footer.style.display = 'none';
         return;
     }
 
+    if (footer) footer.style.display = 'block';
     container.innerHTML = '';
     let total = 0;
 
@@ -367,13 +470,13 @@ window.renderCart = function() {
                 <div style="display: flex; align-items: center; background: rgba(0,0,0,0.3); 
                      border-radius: 12px; padding: 5px; gap: 12px;">
                     <button onclick="changeQty(${index}, -1)" 
-                            style="width: 32px; height: 32px; border: none; background: linear-gradient(45deg, #ff9a8b, #ff6a88); 
+                            style="width: 32px; height: 32px; border: none; background: #ff9a8b; 
                                    color: white; border-radius: 10px; font-weight: bold; cursor: pointer;">
                         -
                     </button>
                     <span style="font-size: 0.95rem; font-weight: bold;">${item.quantity}</span>
                     <button onclick="changeQty(${index}, 1)" 
-                            style="width: 32px; height: 32px; border: none; background: linear-gradient(45deg, #ff9a8b, #ff6a88); 
+                            style="width: 32px; height: 32px; border: none; background: #ff9a8b; 
                                    color: white; border-radius: 10px; font-weight: bold; cursor: pointer;">
                         +
                     </button>
@@ -382,8 +485,9 @@ window.renderCart = function() {
         `;
     });
 
-    if (totalPrice) {
-        totalPrice.textContent = `${total} ₽`;
+    const totalElem = document.getElementById('total-price');
+    if (totalElem) {
+        totalElem.textContent = `Итого: ${total} ₽`;
     }
 };
 
@@ -405,51 +509,9 @@ window.searchMenu = function() {
     const query = document.getElementById('menu-search').value.toLowerCase();
     const filtered = products.filter(p =>
         p.name.toLowerCase().includes(query) &&
-        (currentCategory === 'all' || p.category === currentCategory || p.cat === currentCategory) &&
-        p.available !== false
+        (currentCategory === 'all' || p.cat === currentCategory)
     );
-
-    const container = document.getElementById('menu-container');
-    if (!container) return;
-
-    if (filtered.length === 0) {
-        container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px;">
-                <i class="fas fa-search" style="font-size: 3rem; color: #ff9a8b; margin-bottom: 15px; opacity: 0.5;"></i>
-                <p style="color: rgba(255, 255, 255, 0.7);">Ничего не найдено</p>
-                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.9rem; margin-top: 5px;">Попробуйте изменить запрос</p>
-            </div>
-        `;
-        return;
-    }
-
-    let menuHTML = '';
-    filtered.forEach(p => {
-        const countTag = p.count ? `<div class="p-tag-count">${p.count}</div>` : '';
-        let badgeHTML = '';
-        if (p.badge === 'hit') badgeHTML = `<div class="product-badge badge-hit">ХИТ 🔥</div>`;
-        else if (p.badge === 'new') badgeHTML = `<div class="product-badge badge-new">НОВИНКА ✨</div>`;
-
-        menuHTML += `
-            <div class="product-card" onclick="openDetails('${p.id}')">
-                <div class="img-wrapper">
-                    <img src="${p.img || 'https://via.placeholder.com/300x200?text=Vkusnyashak'}" 
-                         loading="lazy" 
-                         alt="${p.name}">
-                    ${countTag}
-                    ${badgeHTML}
-                </div>
-                <div class="product-info">
-                    <h3>${p.name}</h3>
-                    <div class="product-price">${p.price} ₽</div>
-                    <button class="btn-sm" onclick="event.stopPropagation(); addToCart('${p.id}', this)">
-                        <i class="fas fa-plus"></i> В КОРЗИНУ
-                    </button>
-                </div>
-            </div>`;
-    });
-
-    container.innerHTML = menuHTML;
+    renderMenu(null, filtered);
 };
 
 // Оформление заказа
@@ -457,7 +519,7 @@ window.confirmAndSendOrder = function() {
     cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
 
     if (cart.length === 0) {
-        alert("Корзина пуста!");
+        showNotification("Корзина пуста!", "warning");
         return;
     }
 
@@ -466,12 +528,12 @@ window.confirmAndSendOrder = function() {
     const persons = document.getElementById('order-persons').value || '1';
 
     if (!address) {
-        alert("Укажите адрес доставки!");
+        showNotification("Укажите адрес доставки!", "warning");
         return;
     }
 
-    if (!phone) {
-        alert("Укажите ваш телефон!");
+    if (!phone || phone.length < 10) {
+        showNotification("Укажите корректный телефон!", "warning");
         return;
     }
 
@@ -494,7 +556,7 @@ window.confirmAndSendOrder = function() {
     text += `🍴 *ПРИБОРЫ:* ${persons} чел.\n\n`;
     text += '🍪 _Спасибо за заказ! Скоро свяжемся с вами._ ✨';
 
-    const phoneNumber = '77771234567'; // Замени на нужный номер
+    const phoneNumber = '77771234567';
     const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(text)}`;
 
     window.open(waUrl, '_blank');
@@ -521,7 +583,7 @@ function checkWorkStatus() {
     const hours = now.getHours();
 
     if (hours >= 8 && hours < 22) {
-        badge.innerHTML = `<span style="color: #2ecc71;"><i class="fas fa-circle"></i> МЫ ОТКРЫТЫ</span>`;
+        badge.innerHTML = `<span style="color: #2ecc71;"><i class="fas fa-circle"></i> СЕЙЧАС ОТКРЫТО</span>`;
     } else {
         badge.innerHTML = `<span style="color: #e74c3c;"><i class="fas fa-clock"></i> СЕЙЧАС ЗАКРЫТО</span>`;
     }
@@ -530,84 +592,102 @@ function checkWorkStatus() {
 // Демо товары
 function getDemoProducts() {
     return [{
-            id: '1',
+            id: 'demo1',
             name: 'Торт "Красный бархат"',
             price: 1200,
             desc: 'Нежный бисквит с кремом из сливочного сыра и свежими ягодами',
-            category: 'cakes',
+            cat: 'cakes',
+            type: 'classic',
             badge: 'hit',
             available: true,
-            img: 'img/cake1.jpg'
+            img: 'img/cake1.jpg',
+            count: '1кг'
         },
         {
-            id: '2',
+            id: 'demo2',
             name: 'Шоколадный торт',
             price: 1100,
             desc: 'Насыщенный шоколадный торт с какао и вишней',
-            category: 'cakes',
-            badge: 'popular',
+            cat: 'cakes',
+            type: 'classic',
+            badge: '',
             available: true,
-            img: 'img/cake2.jpg'
+            img: 'img/cake2.jpg',
+            count: '1кг'
         },
         {
-            id: '3',
+            id: 'demo3',
             name: 'Шоколадное печенье',
             price: 180,
             desc: 'С кусочками темного шоколада и грецкими орехами',
-            category: 'cookies',
+            cat: 'cookies',
+            type: 'classic',
             badge: 'hit',
             available: true,
-            img: 'img/cookie1.jpg'
+            img: 'img/cookie1.jpg',
+            count: '300г'
         },
         {
-            id: '4',
+            id: 'demo4',
             name: 'Классический круассан',
             price: 120,
             desc: 'Воздушный круассан из слоеного теста с маслом',
-            category: 'croissants',
+            cat: 'croissants',
+            type: 'classic',
             badge: 'hit',
             available: true,
             img: 'img/croissant1.jpg'
         },
         {
-            id: '5',
+            id: 'demo5',
             name: 'Тирамису',
             price: 350,
             desc: 'Итальянский десерт с кофейной пропиткой и кремом маскарпоне',
-            category: 'desserts',
+            cat: 'desserts',
+            type: 'classic',
             badge: 'new',
             available: true,
-            img: 'img/dessert1.jpg'
+            img: 'img/dessert1.jpg',
+            count: '200г'
         },
         {
-            id: '6',
+            id: 'demo6',
             name: 'Ванильный капкейк',
             price: 180,
             desc: 'Нежный капкейк с ванильным кремом',
-            category: 'cupcakes',
+            cat: 'cupcakes',
+            type: 'classic',
             badge: 'new',
             available: true,
-            img: 'img/cupcake1.jpg'
+            img: 'img/cupcake1.jpg',
+            count: '1шт'
         },
         {
-            id: '7',
+            id: 'demo7',
             name: 'Яблочный пирог',
             price: 450,
             desc: 'Домашний пирог с яблочной начинкой',
-            category: 'pies',
+            cat: 'pies',
+            type: 'seasonal',
             badge: 'hit',
             available: true,
-            img: 'img/pie1.jpg'
+            img: 'img/pie1.jpg',
+            count: '500г'
         },
         {
-            id: '8',
+            id: 'demo8',
             name: 'Капучино',
             price: 150,
             desc: 'Ароматный кофе с молочной пенкой',
-            category: 'drinks',
+            cat: 'drinks',
+            type: 'classic',
             badge: '',
             available: true,
-            img: 'img/drink1.jpg'
+            img: 'img/drink1.jpg',
+            count: '350мл'
         }
     ];
 }
+
+// Загрузка при старте
+document.addEventListener('DOMContentLoaded', loadData);

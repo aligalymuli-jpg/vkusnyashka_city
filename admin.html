@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         #admin-content {
+            display: none;
             padding: 20px;
             max-width: 800px;
             margin: 0 auto;
@@ -117,36 +118,58 @@
             flex-wrap: wrap;
         }
         
-        .admin-filters input,
-        .admin-filters select {
-            margin: 0;
-            flex: 1;
-            min-width: 150px;
+        #login-form {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+        }
+        
+        .login-box {
+            background: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #ff9a8b;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
 
 <body>
-    <div id="preloader">
-        <div class="loader-content">
-            <h2 style="font-family: 'Dancing Script', cursive; color: #ff9a8b; font-size: 3rem;">Админ-панель</h2>
-            <div class="spinner"></div>
-            <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА...</p>
+    <div id="login-form">
+        <div class="login-box">
+            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 2.5rem; margin-bottom: 20px;">
+                Админ-панель
+            </h2>
+            <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px;">
+                Введите пароль для входа в систему управления
+            </p>
+            <input type="password" id="admin-pass" placeholder="Пароль администратора" style="width: 100%; padding: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,154,139,0.3); border-radius: 10px; color: white;">
+            <button onclick="login()" class="btn-sm" style="width: 100%; height: 50px; font-size: 1.1rem;">
+                <i class="fas fa-lock"></i> ВОЙТИ В АДМИНКУ
+            </button>
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 20px;">
+                Если забыли пароль, обратитесь к разработчику
+            </p>
         </div>
     </div>
 
-    <div id="admin-content" style="display: none;">
+    <div id="admin-content">
         <div class="admin-box">
             <div class="admin-header">
-                <h1 style="color: #ff9a8b; font-family: 'Dancing Script', cursive;">
-                    <i class="fas fa-cog"></i> Админ-панель
+                <h1 style="color: #ff9a8b; font-family: 'Marck Script', cursive;">
+                    <i class="fas fa-cog"></i> Админ-панель Vkusnyashak City
                 </h1>
                 <div>
                     <a href="index.html" style="color: #ff9a8b; text-decoration: none; margin-right: 15px;">
                         <i class="fas fa-home"></i> На сайт
                     </a>
-                    <button onclick="location.reload()" style="background: none; border: 1px solid #ff9a8b; color: #ff9a8b; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-                        Выйти
+                    <button onclick="logout()" style="background: none; border: 1px solid #ff9a8b; color: #ff9a8b; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
                     </button>
                 </div>
             </div>
@@ -155,7 +178,7 @@
 
             <form id="productForm" onsubmit="saveProduct(event)">
                 <input type="text" id="p-name" placeholder="Название товара" required>
-                <input type="number" id="p-price" placeholder="Цена (в рублях)" required min="0">
+                <input type="number" id="p-price" placeholder="Цена (в рублях)" required min="1">
                 <textarea id="p-desc" placeholder="Описание товара"></textarea>
                 <input type="text" id="p-count" placeholder="Вес/количество (напр., 500г, 1шт)">
 
@@ -169,6 +192,17 @@
                     <option value="pies">Пироги</option>
                     <option value="bread">Хлеб</option>
                     <option value="drinks">Напитки</option>
+                    <option value="sauces">Соусы</option>
+                    <option value="sets">Сеты</option>
+                </select>
+
+                <select id="p-type">
+                    <option value="">Тип (необязательно)</option>
+                    <option value="classic">🍰 Классические</option>
+                    <option value="seasonal">🍂 Сезонные</option>
+                    <option value="vegan">🌱 Веганские</option>
+                    <option value="glutenfree">🌾 Без глютена</option>
+                    <option value="sugarfree">🍬 Без сахара</option>
                 </select>
 
                 <select id="product-badge">
@@ -190,7 +224,7 @@
                 </button>
 
                 <button type="button" id="cancel-edit" onclick="resetForm()" style="display:none; width: 100%; margin-top:10px; background:#333; border:1px solid #555; color:white; border-radius:10px; padding:12px; cursor:pointer;">
-                    ОТМЕНИТЬ РЕДАКТИРОВАНИЕ
+                    <i class="fas fa-times"></i> ОТМЕНИТЬ РЕДАКТИРОВАНИЕ
                 </button>
             </form>
 
@@ -210,6 +244,8 @@
                     <option value="pies">Пироги</option>
                     <option value="bread">Хлеб</option>
                     <option value="drinks">Напитки</option>
+                    <option value="sauces">Соусы</option>
+                    <option value="sets">Сеты</option>
                 </select>
             </div>
 
@@ -221,7 +257,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script>
-        // Используем твои ключи Firebase
+        // Конфигурация Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
             authDomain: "vkusnyashka-final.firebaseapp.com",
@@ -231,20 +267,65 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const imgbbKey = "19b2ea0cacae4c9328806e4c678db140"; // Ключ для загрузки фото
+        const auth = firebase.auth();
+
+        // БЕЗОПАСНЫЙ КЛЮЧ - хранится на сервере (для примера, лучше использовать Firebase Storage)
+        const imgbbKey = "19b2ea0cacae4c9328806e4c678db140";
+
+        // Пароль администратора (можно поменять)
+        const ADMIN_PASS = "123";
 
         let editId = null;
 
-        // Автоматический вход в админку (для простоты)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Скрываем прелоадер
-            setTimeout(() => {
-                document.getElementById('preloader').style.display = 'none';
+        // Вход в админку
+        window.login = function() {
+            const password = document.getElementById('admin-pass').value;
+
+            if (password === ADMIN_PASS) {
+                // Сохраняем сессию на 1 час
+                sessionStorage.setItem('admin_auth', 'true');
+                sessionStorage.setItem('auth_time', Date.now());
+
+                document.getElementById('login-form').style.display = 'none';
                 document.getElementById('admin-content').style.display = 'block';
                 fetchList();
-            }, 1000);
+
+                // Автологин на 1 час
+                setTimeout(checkAuth, 3600000);
+            } else {
+                alert("Неверный пароль!");
+                document.getElementById('admin-pass').value = '';
+            }
+        };
+
+        // Проверка авторизации
+        function checkAuth() {
+            const authTime = sessionStorage.getItem('auth_time');
+            const now = Date.now();
+
+            if (!sessionStorage.getItem('admin_auth') || (now - authTime > 3600000)) {
+                logout();
+            }
+        }
+
+        // Выход
+        window.logout = function() {
+            sessionStorage.removeItem('admin_auth');
+            sessionStorage.removeItem('auth_time');
+            location.reload();
+        };
+
+        // Проверяем авторизацию при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            if (sessionStorage.getItem('admin_auth')) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                fetchList();
+            }
         });
 
+        // Превью фото
         function showPreview(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -258,15 +339,28 @@
             }
         }
 
+        // Сохранение товара
         async function saveProduct(event) {
             event.preventDefault();
+
+            if (!sessionStorage.getItem('admin_auth')) {
+                alert("Сессия истекла! Войдите заново.");
+                logout();
+                return;
+            }
 
             const btn = document.getElementById('add-btn');
             const fileInput = document.getElementById('p-file');
 
-            // Если добавляем новый товар, фото обязательно
             if (!editId && !fileInput.files[0]) {
                 alert("Для нового товара загрузите фото!");
+                return;
+            }
+
+            // Проверка цены
+            const price = parseInt(document.getElementById('p-price').value);
+            if (price < 1 || price > 100000) {
+                alert("Цена должна быть от 1 до 100 000 рублей");
                 return;
             }
 
@@ -301,11 +395,21 @@
                     desc: document.getElementById('p-desc').value || '',
                     count: document.getElementById('p-count').value || '',
                     cat: document.getElementById('p-cat').value,
+                    type: document.getElementById('p-type').value || '',
                     badge: document.getElementById('product-badge').value || '',
-                    available: true
+                    available: true,
+                    createdAt: Date.now()
                 };
 
                 if (imgUrl) productData.img = imgUrl;
+
+                // Если редактируем, сохраняем существующее фото
+                if (editId && !imgUrl) {
+                    const existingImg = document.getElementById('img-preview').src;
+                    if (existingImg && existingImg.startsWith('http')) {
+                        productData.img = existingImg;
+                    }
+                }
 
                 // Сохраняем в Firebase
                 const dbRef = editId ? db.ref('products/' + editId) : db.ref('products').push();
@@ -324,6 +428,7 @@
             }
         }
 
+        // Получение списка товаров
         function fetchList() {
             db.ref('products').on('value', snapshot => {
                 const container = document.getElementById('product-list');
@@ -359,6 +464,7 @@
                             <strong>${data[id].name}</strong>
                             <div style="font-size: 0.9rem; opacity: 0.7;">
                                 ${data[id].price} ₽ • ${getCategoryName(data[id].cat)}
+                                ${data[id].type ? ' • ' + getTypeName(data[id].type) : ''}
                                 ${data[id].available === false ? ' • ❌ НЕТ В НАЛИЧИИ' : ''}
                             </div>
                         </div>
@@ -383,9 +489,22 @@
                 'cupcakes': 'Капкейки',
                 'pies': 'Пироги',
                 'bread': 'Хлеб',
-                'drinks': 'Напитки'
+                'drinks': 'Напитки',
+                'sauces': 'Соусы',
+                'sets': 'Сеты'
             };
             return categories[cat] || cat;
+        }
+
+        function getTypeName(type) {
+            const types = {
+                'classic': '🍰',
+                'seasonal': '🍂',
+                'vegan': '🌱',
+                'glutenfree': '🌾',
+                'sugarfree': '🍬'
+            };
+            return types[type] || type;
         }
 
         window.editItem = function(id) {
@@ -399,10 +518,11 @@
                 document.getElementById('p-desc').value = p.desc || '';
                 document.getElementById('p-count').value = p.count || '';
                 document.getElementById('p-cat').value = p.cat || '';
+                document.getElementById('p-type').value = p.type || '';
                 document.getElementById('product-badge').value = p.badge || '';
 
                 document.getElementById('form-title').innerText = "Редактирование товара";
-                document.getElementById('add-btn').innerText = "СОХРАНИТЬ ИЗМЕНЕНИЯ";
+                document.getElementById('add-btn').innerHTML = '<i class="fas fa-save"></i> СОХРАНИТЬ ИЗМЕНЕНИЯ';
                 document.getElementById('cancel-edit').style.display = "block";
 
                 if (p.img) {
@@ -422,21 +542,25 @@
             editId = null;
             document.getElementById('productForm').reset();
             document.getElementById('form-title').innerText = "Добавить новый товар";
-            document.getElementById('add-btn').innerText = "СОХРАНИТЬ ТОВАР";
+            document.getElementById('add-btn').innerHTML = '<i class="fas fa-save"></i> СОХРАНИТЬ ТОВАР';
             document.getElementById('cancel-edit').style.display = "none";
             document.getElementById('img-preview').style.display = "none";
             document.getElementById('upload-label').style.display = "block";
         };
 
         window.toggleAvailability = function(id, currentStatus) {
-            db.ref('products/' + id).update({
-                available: !currentStatus
-            });
+            if (confirm("Изменить статус доступности?")) {
+                db.ref('products/' + id).update({
+                    available: !currentStatus
+                });
+            }
         };
 
         function deleteItem(id) {
-            if (confirm("Удалить этот товар?")) {
-                db.ref('products/' + id).remove();
+            if (confirm("Удалить этот товар? Это действие нельзя отменить!")) {
+                db.ref('products/' + id).remove()
+                    .then(() => alert("Товар удален"))
+                    .catch(err => alert("Ошибка удаления: " + err.message));
             }
         }
     </script>

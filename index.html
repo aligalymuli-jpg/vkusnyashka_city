@@ -7,7 +7,30 @@
     <title>Vkusnyashak City | Кондитерская Алматы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3.0">
+    <link rel="stylesheet" href="style.css?v=4.0">
+    <style>
+        /* Снег анимация */
+        
+        @keyframes fall {
+            to {
+                transform: translateY(105vh);
+            }
+        }
+        /* Кастомный скроллбар */
+        
+         ::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -15,7 +38,7 @@
         <div class="loader-content">
             <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 3.5rem;">Vkusnyashak City</h2>
             <div class="spinner"></div>
-            <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА МЕНЮ...</p>
+            <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА...</p>
         </div>
     </div>
 
@@ -97,12 +120,12 @@
 
                 <button class="cat-btn" onclick="filterCat('sets', this)">
                     <img src="img/cat_sets.jpg" alt="Сеты">
-                    <span>Сеты и комбо</span>
+                    <span>Сеты</span>
                 </button>
             </div>
 
             <div id="menu-screen" style="display: none;">
-                <button onclick="showCategories()" style="background: #ff9a8b; color: white; border: none; padding: 12px 20px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; cursor: pointer; width: 100%; font-family: 'Montserrat', sans-serif;">
+                <button onclick="showCategories()" class="btn-sm" style="background: #333; border: 1px solid #ff9a8b; margin-bottom: 20px;">
                     <i class="fas fa-arrow-left"></i> НАЗАД К КАТЕГОРИЯМ
                 </button>
                 <h3 id="current-category-title" style="text-align: center; color: #ff9a8b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px;"></h3>
@@ -185,7 +208,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="script.js?v=3.0"></script>
+    <script src="script.js?v=4.0"></script>
 </body>
 
 </html>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Корзина | Vkusnyashak City</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Marck+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -108,6 +108,27 @@
             color: #ff9a8b;
             margin-bottom: 20px;
         }
+        
+        .header-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 
@@ -116,15 +137,13 @@
         <source src="2019_1_small.mp4" type="video/mp4">
     </video>
 
-    <header style="position: relative; background: rgba(0,0,0,0.5); padding: 15px 0;">
-        <nav class="wrapper" style="display: flex; align-items: center; justify-content: space-between;">
-            <a href="index.html" style="color: white; text-decoration: none; font-size: 0.9rem; background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 12px;">
-                <i class="fas fa-chevron-left"></i> На главную
-            </a>
-            <div class="brand">Корзина <span>Vkusnyashak</span></div>
-            <div style="width: 70px;"></div>
-        </nav>
-    </header>
+    <div class="header-nav">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-chevron-left"></i> На главную
+        </a>
+        <div class="brand">Корзина <span style="color: #ff9a8b;">Vkusnyashak</span></div>
+        <div style="width: 70px;"></div>
+    </div>
 
     <div class="wrapper" style="margin-top: 30px;">
         <div id="cart-content">
@@ -150,11 +169,16 @@
         <div class="modal-card">
             <span class="close-btn" onclick="document.getElementById('orderModal').style.display='none'">&times;</span>
             <div class="modal-info">
-                <h2 style="color: #ff9a8b; margin-bottom: 20px; font-family: 'Dancing Script'; font-size: 2.2rem; text-align: center;">Оформление заказа</h2>
+                <h2 style="color: #ff9a8b; margin-bottom: 20px; font-family: 'Marck Script'; font-size: 2.2rem; text-align: center;">Оформление заказа</h2>
 
                 <div style="margin-bottom: 15px;">
                     <label style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 8px; display: block;">Адрес доставки:</label>
                     <input type="text" id="order-address" placeholder="Улица, дом, квартира">
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 8px; display: block;">Ваш телефон:</label>
+                    <input type="tel" id="order-phone" placeholder="+7 (777) 123-45-67">
                 </div>
 
                 <div style="margin-bottom: 25px;">
@@ -172,7 +196,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script>
-        // Используем твои ключи Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
             authDomain: "vkusnyashka-final.firebaseapp.com",
@@ -213,18 +236,18 @@
             let total = 0;
 
             cart.forEach((item, index) => {
-                total += item.price * item.qty;
+                total += item.price * item.qty || item.quantity || 1;
 
                 container.innerHTML += `
                     <div class="cart-item">
                         <img src="${item.img || 'https://via.placeholder.com/80x80?text=Товар'}" alt="${item.name}">
                         <div style="flex-grow: 1;">
                             <h4>${item.name}</h4>
-                            <p>${item.price} ₽ × ${item.qty} = ${item.price * item.qty} ₽</p>
+                            <p>${item.price} ₽ × ${item.qty || item.quantity || 1} = ${item.price * (item.qty || item.quantity || 1)} ₽</p>
                         </div>
                         <div class="qty-controls">
                             <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                            <span style="font-size: 0.95rem; font-weight: bold;">${item.qty}</span>
+                            <span style="font-size: 0.95rem; font-weight: bold;">${item.qty || item.quantity || 1}</span>
                             <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
                         </div>
                     </div>`;
@@ -235,12 +258,19 @@
         };
 
         window.changeQty = function(index, delta) {
-            cart[index].qty += delta;
-            if (cart[index].qty <= 0) {
-                cart.splice(index, 1);
+            const cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
+
+            if (cart[index]) {
+                cart[index].quantity = (cart[index].quantity || cart[index].qty || 0) + delta;
+                cart[index].qty = cart[index].quantity; // Синхронизация
+
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+
+                localStorage.setItem('vkusnyashak_cart', JSON.stringify(cart));
+                renderCart();
             }
-            localStorage.setItem('vkusnyashak_cart', JSON.stringify(cart));
-            renderCart();
         };
 
         window.sendOrder = function() {
@@ -258,10 +288,16 @@
             }
 
             const address = document.getElementById('order-address').value;
+            const phone = document.getElementById('order-phone').value;
             const persons = document.getElementById('order-persons').value || '1';
 
             if (!address) {
                 alert("Укажите адрес доставки!");
+                return;
+            }
+
+            if (!phone || phone.length < 10) {
+                alert("Укажите корректный телефон!");
                 return;
             }
 
@@ -271,20 +307,22 @@
             text += "🎂 *СОСТАВ ЗАКАЗА:* 🎂\n\n";
 
             cart.forEach((item, index) => {
+                const qty = item.qty || item.quantity || 1;
                 text += `${index + 1}. *${item.name}*\n`;
-                text += `   • ${item.qty} шт. x ${item.price} ₽ = ${item.price * item.qty} ₽\n`;
+                text += `   • ${qty} шт. x ${item.price} ₽ = ${item.price * qty} ₽\n`;
             });
 
-            let total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            let total = cart.reduce((s, i) => s + (i.price * (i.qty || i.quantity || 1)), 0);
             text += "\n==========================\n";
             text += `✅ *ИТОГО К ОПЛАТЕ: ${total} ₽*\n`;
             text += "==========================\n\n";
             text += `📍 *АДРЕС:* ${address}\n`;
+            text += `📞 *ТЕЛЕФОН:* ${phone}\n`;
             text += `🍴 *ПРИБОРЫ:* ${persons} чел.\n\n`;
             text += "🍪 _Спасибо за заказ! Скоро свяжемся с вами._ ✨";
 
-            const phone = "77771234567"; // Замени на нужный номер
-            const waUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(text)}`;
+            const phoneNumber = "77771234567";
+            const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(text)}`;
 
             window.open(waUrl, '_blank');
 
@@ -295,6 +333,7 @@
 
             document.getElementById('orderModal').style.display = 'none';
             document.getElementById('order-address').value = '';
+            document.getElementById('order-phone').value = '';
             document.getElementById('order-persons').value = '1';
 
             alert("Заказ отправлен! Ожидайте звонка для подтверждения.");
