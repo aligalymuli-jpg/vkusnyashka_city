@@ -7,38 +7,15 @@
     <title>Vkusnyashak City | Кондитерская Алматы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4.0">
-    <style>
-        /* Снег анимация */
-        
-        @keyframes fall {
-            to {
-                transform: translateY(105vh);
-            }
-        }
-        /* Кастомный скроллбар */
-        
-         ::-webkit-scrollbar {
-            width: 5px;
-        }
-        
-         ::-webkit-scrollbar-track {
-            background: var(--dark);
-        }
-        
-         ::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css?v=1.0">
 </head>
 
 <body>
     <div id="preloader">
         <div class="loader-content">
-            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 3.5rem;">Vkusnyashak City</h2>
+            <h2>Vkusnyashak City</h2>
             <div class="spinner"></div>
-            <p style="letter-spacing: 3px; font-size: 0.8rem; opacity: 0.6; color: white;">ЗАГРУЗКА...</p>
+            <p>ЗАГРУЗКА МЕНЮ...</p>
         </div>
     </div>
 
@@ -70,54 +47,45 @@
     <main class="wrapper">
         <section id="menu-section">
             <h2 class="section-title">Наше Меню</h2>
-            <div id="work-status-badge" style="text-align: center; margin-bottom: 25px; font-weight: 600;"></div>
+            <div id="work-status-badge"></div>
 
             <div class="categories" id="categories-screen">
                 <button class="cat-btn" onclick="filterCat('cakes', this)">
                     <img src="img/cat_cakes.jpg" alt="Торты">
                     <span>Торты</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('cookies', this)">
                     <img src="img/cat_cookies.jpg" alt="Печенье">
                     <span>Печенье</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('croissants', this)">
                     <img src="img/cat_croissants.jpg" alt="Круассаны">
                     <span>Круассаны</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('desserts', this)">
                     <img src="img/cat_desserts.jpg" alt="Десерты">
                     <span>Десерты</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('cupcakes', this)">
                     <img src="img/cat_cupcakes.jpg" alt="Капкейки">
                     <span>Капкейки</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('pies', this)">
                     <img src="img/cat_pies.jpg" alt="Пироги">
                     <span>Пироги</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('bread', this)">
                     <img src="img/cat_bread.jpg" alt="Хлеб">
                     <span>Хлеб</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('drinks', this)">
                     <img src="img/cat_drinks.jpg" alt="Напитки">
                     <span>Напитки</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('sauces', this)">
                     <img src="img/cat_sauces.jpg" alt="Соусы">
                     <span>Соусы</span>
                 </button>
-
                 <button class="cat-btn" onclick="filterCat('sets', this)">
                     <img src="img/cat_sets.jpg" alt="Сеты">
                     <span>Сеты</span>
@@ -125,18 +93,16 @@
             </div>
 
             <div id="menu-screen" style="display: none;">
-                <button onclick="showCategories()" class="btn-sm" style="background: #333; border: 1px solid #ff9a8b; margin-bottom: 20px;">
+                <button onclick="showCategories()" class="back-btn">
                     <i class="fas fa-arrow-left"></i> НАЗАД К КАТЕГОРИЯМ
                 </button>
-                <h3 id="current-category-title" style="text-align: center; color: #ff9a8b; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px;"></h3>
+                <h3 id="current-category-title"></h3>
 
-                <div id="type-filters" style="display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; padding: 0 10px;"></div>
+                <div id="type-filters"></div>
 
-                <div class="search-container" style="max-width: 500px; margin: 0 auto 30px; padding: 0;">
-                    <div style="position: relative;">
-                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.5; color: white;"></i>
-                        <input type="text" id="menu-search" placeholder="Поиск в этой категории..." oninput="searchMenu()" style="width: 100%; padding: 14px 14px 14px 45px; border-radius: 15px; border: 1px solid rgba(255, 154, 139, 0.3); background: rgba(255,255,255,0.08); color: white; outline: none; font-family: 'Montserrat', sans-serif;">
-                    </div>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="menu-search" placeholder="Поиск в этой категории..." oninput="searchMenu()">
                 </div>
 
                 <div class="menu-grid" id="menu-container"></div>
@@ -146,59 +112,65 @@
         <section id="location">
             <h2 class="section-title">Контакты</h2>
             <div class="info-card">
-                <div class="info-item"><i class="fas fa-map-marker-alt"></i>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
                     <p>г. Алматы, Доставка и Самовывоз</p>
                 </div>
-                <div class="info-item"><i class="fas fa-clock"></i>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
                     <p>Ежедневно: 8:00 — 22:00</p>
                 </div>
-                <div class="info-item"><i class="fas fa-phone"></i>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
                     <p>+7 (777) 123-45-67</p>
                 </div>
                 <div class="social-links">
-                    <a href="https://wa.me/77771234567" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/77771234567" class="social-icon wa" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
                 </div>
             </div>
         </section>
     </main>
 
+    <!-- Модалка товара -->
     <div id="productModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-card">
-            <span class="close-btn" onclick="document.getElementById('productModal').style.display='none'">&times;</span>
+            <span class="close-btn" onclick="closeModalProduct()">&times;</span>
             <img id="modalImg" src="">
             <div class="modal-info">
                 <h2 id="modalName"></h2>
                 <div id="modalCount"></div>
                 <p id="modalDesc"></p>
                 <div id="upsell-container"></div>
-                <div class="modal-footer-flex" style="display:flex; justify-content: space-between; align-items: center; margin-top:20px;">
-                    <span id="modalPrice" style="color: #ff9a8b; font-size: 1.5rem; font-weight: bold;"></span>
-                    <button id="modalAddBtn" class="btn-sm" style="width: auto; padding: 12px 30px;">В КОРЗИНУ</button>
+                <div class="modal-footer-flex">
+                    <span id="modalPrice"></span>
+                    <button id="modalAddBtn" class="btn-sm">В КОРЗИНУ</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Модалка корзины -->
     <div id="cartModal" class="modal-overlay" onclick="if(event.target === this) this.style.display='none'">
-        <div class="modal-card" style="max-height: 90vh; overflow-y: auto;">
-            <span class="close-btn" onclick="document.getElementById('cartModal').style.display='none'">&times;</span>
+        <div class="modal-card">
+            <span class="close-btn" onclick="closeCartModal()">&times;</span>
             <div class="modal-info">
-                <h2 style="color: #ff9a8b; margin-bottom: 20px; text-align: center;">Ваш заказ</h2>
-
+                <h2>Ваш заказ</h2>
                 <div id="cart-content"></div>
-
-                <div id="cart-footer" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                    <div id="total-price" style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 20px; color: #ff9a8b;"></div>
-
-                    <h3 style="font-size: 1rem; margin-bottom: 10px; color: #fff;">Данные для доставки:</h3>
+                <div id="cart-footer">
+                    <div id="total-price"></div>
+                    <h3>Данные для доставки:</h3>
                     <input type="text" id="order-address" placeholder="Адрес доставки (Улица, дом, кв)">
-                    <input type="tel" id="order-phone" placeholder="Ваш телефон" style="margin-top: 10px; width: 100%;">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
-                        <span style="font-size: 0.8rem; opacity: 0.7;">Приборов:</span>
-                        <input type="number" id="order-persons" value="1" min="1" style="width: 80px;">
+                    <input type="tel" id="order-phone" placeholder="Ваш телефон">
+                    <div class="persons-input">
+                        <span>Приборов:</span>
+                        <input type="number" id="order-persons" value="1" min="1">
                     </div>
-                    <button onclick="confirmAndSendOrder()" class="btn-sm" style="margin-top: 20px; font-size: 1rem; width: 100%;">
+                    <button onclick="confirmAndSendOrder()" class="btn-sm">
                         <i class="fab fa-whatsapp"></i> ПОДТВЕРДИТЬ В WHATSAPP
                     </button>
                 </div>
@@ -208,7 +180,8 @@
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="script.js?v=4.0"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="script.js?v=1.0"></script>
 </body>
 
 </html>

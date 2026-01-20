@@ -5,22 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Админка | Vkusnyashak City</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=1.0">
     <style>
         #admin-content {
             display: none;
             padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
         }
         
         .admin-box {
-            background: rgba(20, 20, 20, 0.9);
-            padding: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #111;
+            padding: 25px;
             border-radius: 20px;
-            border: 2px solid #ff9a8b;
-            backdrop-filter: blur(10px);
+            border: 1px solid #ff9a8b;
         }
         
         input,
@@ -28,236 +26,93 @@
         textarea {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 154, 139, 0.3);
-            border-radius: 10px;
+            margin: 8px 0;
+            background: #222;
             color: white;
+            border: 1px solid #444;
+            border-radius: 10px;
             font-size: 1rem;
         }
         
         textarea {
-            height: 100px;
-            resize: vertical;
+            height: 80px;
+            resize: none;
         }
         
         .upload-area {
-            border: 2px dashed rgba(255, 154, 139, 0.3);
+            border: 2px dashed #444;
             padding: 30px;
             text-align: center;
             border-radius: 15px;
             cursor: pointer;
             margin: 15px 0;
-            transition: all 0.3s;
-        }
-        
-        .upload-area:hover {
-            border-color: #ff9a8b;
-            background: rgba(255, 154, 139, 0.05);
+            display: block;
         }
         
         #img-preview {
             width: 100%;
             max-height: 200px;
             object-fit: contain;
-            border-radius: 10px;
-            margin-top: 15px;
             display: none;
+            margin-top: 15px;
+            border-radius: 10px;
         }
         
         .list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-bottom: 1px solid #333;
         }
         
-        .admin-controls {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .admin-controls button {
-            padding: 5px 10px;
-            border-radius: 5px;
+        .btn-delete {
+            color: #ff4d4d;
+            background: none;
             border: none;
             cursor: pointer;
             font-weight: bold;
         }
         
-        .btn-delete {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-edit {
-            background: #3498db;
-            color: white;
-        }
-        
-        .btn-toggle {
-            background: #2ecc71;
-            color: white;
-        }
-        
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+        .admin-controls button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            font-weight: bold;
         }
         
         .admin-filters {
             display: flex;
             gap: 10px;
-            margin: 20px 0;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
+            margin-top: 10px;
         }
         
-        #login-form {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
-        }
-        
-        .login-box {
-            background: rgba(20, 20, 20, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid #ff9a8b;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            backdrop-filter: blur(10px);
+        .admin-filters input,
+        .admin-filters select {
+            margin: 0;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 
 <body>
-    <div id="login-form">
-        <div class="login-box">
-            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 2.5rem; margin-bottom: 20px;">
-                Админ-панель
-            </h2>
-            <p style="color: rgba(255,255,255,0.7); margin-bottom: 20px;">
-                Введите пароль для входа в систему управления
-            </p>
-            <input type="password" id="admin-pass" placeholder="Пароль администратора" style="width: 100%; padding: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,154,139,0.3); border-radius: 10px; color: white;">
-            <button onclick="login()" class="btn-sm" style="width: 100%; height: 50px; font-size: 1.1rem;">
-                <i class="fas fa-lock"></i> ВОЙТИ В АДМИНКУ
-            </button>
-            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-top: 20px;">
-                Если забыли пароль, обратитесь к разработчику
-            </p>
+    <div id="login-form" style="height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="admin-box" style="text-align: center;">
+            <h2 style="font-family: 'Marck Script', cursive; color: #ff9a8b; font-size: 2.5rem;">Админка</h2>
+            <input type="password" id="admin-pass" placeholder="Пароль администратора">
+            <button onclick="login()" class="btn-sm" style="margin-top: 15px; height: 50px; width: 100%;">Войти</button>
         </div>
     </div>
 
-    <div id="admin-content">
-        <div class="admin-box">
-            <div class="admin-header">
-                <h1 style="color: #ff9a8b; font-family: 'Marck Script', cursive;">
-                    <i class="fas fa-cog"></i> Админ-панель Vkusnyashak City
-                </h1>
-                <div>
-                    <a href="index.html" style="color: #ff9a8b; text-decoration: none; margin-right: 15px;">
-                        <i class="fas fa-home"></i> На сайт
-                    </a>
-                    <button onclick="logout()" style="background: none; border: 1px solid #ff9a8b; color: #ff9a8b; padding: 8px 15px; border-radius: 8px; cursor: pointer;">
-                        <i class="fas fa-sign-out-alt"></i> Выйти
-                    </button>
-                </div>
-            </div>
-
-            <h2 id="form-title" style="color: white; margin: 20px 0;">Добавить новый товар</h2>
-
-            <form id="productForm" onsubmit="saveProduct(event)">
-                <input type="text" id="p-name" placeholder="Название товара" required>
-                <input type="number" id="p-price" placeholder="Цена (в рублях)" required min="1">
-                <textarea id="p-desc" placeholder="Описание товара"></textarea>
-                <input type="text" id="p-count" placeholder="Вес/количество (напр., 500г, 1шт)">
-
-                <select id="p-cat" required>
-                    <option value="">Выберите категорию</option>
-                    <option value="cakes">Торты</option>
-                    <option value="cookies">Печенье</option>
-                    <option value="croissants">Круассаны</option>
-                    <option value="desserts">Десерты</option>
-                    <option value="cupcakes">Капкейки</option>
-                    <option value="pies">Пироги</option>
-                    <option value="bread">Хлеб</option>
-                    <option value="drinks">Напитки</option>
-                    <option value="sauces">Соусы</option>
-                    <option value="sets">Сеты</option>
-                </select>
-
-                <select id="p-type">
-                    <option value="">Тип (необязательно)</option>
-                    <option value="classic">🍰 Классические</option>
-                    <option value="seasonal">🍂 Сезонные</option>
-                    <option value="vegan">🌱 Веганские</option>
-                    <option value="glutenfree">🌾 Без глютена</option>
-                    <option value="sugarfree">🍬 Без сахара</option>
-                </select>
-
-                <select id="product-badge">
-                    <option value="">Без бейджа</option>
-                    <option value="hit">ХИТ 🔥</option>
-                    <option value="new">НОВИНКА ✨</option>
-                </select>
-
-                <label class="upload-area">
-                    <input type="file" id="p-file" accept="image/*" style="display:none;" onchange="showPreview(this)">
-                    <span id="upload-label" style="color: #ff9a8b; font-weight: bold;">
-                        <i class="fas fa-cloud-upload-alt"></i> ЗАГРУЗИТЬ ФОТО
-                    </span>
-                    <img id="img-preview">
-                </label>
-
-                <button type="submit" id="add-btn" class="btn-sm" style="width: 100%; margin-top: 20px;">
-                    <i class="fas fa-save"></i> СОХРАНИТЬ ТОВАР
-                </button>
-
-                <button type="button" id="cancel-edit" onclick="resetForm()" style="display:none; width: 100%; margin-top:10px; background:#333; border:1px solid #555; color:white; border-radius:10px; padding:12px; cursor:pointer;">
-                    <i class="fas fa-times"></i> ОТМЕНИТЬ РЕДАКТИРОВАНИЕ
-                </button>
-            </form>
-
-            <h3 style="color: #ff9a8b; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255, 154, 139, 0.3);">
-                <i class="fas fa-list"></i> Список товаров
-            </h3>
-
-            <div class="admin-filters">
-                <input type="text" id="admin-search" placeholder="🔍 Поиск по названию..." oninput="fetchList()">
-                <select id="admin-filter-cat" onchange="fetchList()">
-                    <option value="all">Все категории</option>
-                    <option value="cakes">Торты</option>
-                    <option value="cookies">Печенье</option>
-                    <option value="croissants">Круассаны</option>
-                    <option value="desserts">Десерты</option>
-                    <option value="cupcakes">Капкейки</option>
-                    <option value="pies">Пироги</option>
-                    <option value="bread">Хлеб</option>
-                    <option value="drinks">Напитки</option>
-                    <option value="sauces">Соусы</option>
-                    <option value="sets">Сеты</option>
-                </select>
-            </div>
-
-            <div id="product-list" style="margin-top: 20px;"></div>
-        </div>
-    </div>
+    <div id="admin-content"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script>
-        // Конфигурация Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
             authDomain: "vkusnyashka-final.firebaseapp.com",
@@ -267,65 +122,115 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const auth = firebase.auth();
-
-        // БЕЗОПАСНЫЙ КЛЮЧ - хранится на сервере (для примера, лучше использовать Firebase Storage)
-        const imgbbKey = "19b2ea0cacae4c9328806e4c678db140";
-
-        // Пароль администратора (можно поменять)
-        const ADMIN_PASS = "123";
+        const imgbbKey = "68f93abb27b5ba9de658c9d854859342"; // ЗАМЕНИ НА СВОЙ КЛЮЧ!
 
         let editId = null;
 
-        // Вход в админку
-        window.login = function() {
-            const password = document.getElementById('admin-pass').value;
+        async function login() {
+            const pass = document.getElementById('admin-pass').value;
+            const adminEmail = "admin@vkusnyashak.kz";
 
-            if (password === ADMIN_PASS) {
-                // Сохраняем сессию на 1 час
-                sessionStorage.setItem('admin_auth', 'true');
-                sessionStorage.setItem('auth_time', Date.now());
-
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
-                fetchList();
-
-                // Автологин на 1 час
-                setTimeout(checkAuth, 3600000);
-            } else {
-                alert("Неверный пароль!");
-                document.getElementById('admin-pass').value = '';
+            if (!pass) {
+                alert("Введите пароль!");
+                return;
             }
-        };
 
-        // Проверка авторизации
-        function checkAuth() {
-            const authTime = sessionStorage.getItem('auth_time');
-            const now = Date.now();
-
-            if (!sessionStorage.getItem('admin_auth') || (now - authTime > 3600000)) {
-                logout();
+            try {
+                await firebase.auth().signInWithEmailAndPassword(adminEmail, pass);
+                document.getElementById('login-form').remove();
+                const content = document.getElementById('admin-content');
+                content.style.display = 'block';
+                renderAdminUI(content);
+                fetchList();
+                console.log("Вход выполнен!");
+            } catch (e) {
+                console.error("Ошибка входа:", e);
+                if (e.code === 'auth/user-not-found') {
+                    alert("Создайте пользователя в Firebase Console: Email: admin@vkusnyashak.kz");
+                } else {
+                    alert("Ошибка: " + e.message);
+                }
             }
         }
 
-        // Выход
-        window.logout = function() {
-            sessionStorage.removeItem('admin_auth');
-            sessionStorage.removeItem('auth_time');
-            location.reload();
-        };
+        function renderAdminUI(container) {
+            container.innerHTML = `
+                <div class="admin-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <a href="index.html" style="color:#ff9a8b; text-decoration: none;">← На сайт</a>
+                        <button onclick="location.reload()" style="background:none; border:none; color:#666;">Выйти</button>
+                    </div>
+                    <h2 id="form-title" style="margin: 20px 0;">Новое изделие</h2>
+                    <form id="productForm" onsubmit="saveProduct(event)">
+                        <input type="text" id="p-name" placeholder="Название" required>
+                        <input type="number" id="p-price" placeholder="Цена (₸)" required>
+                        <textarea id="p-desc" placeholder="Описание..."></textarea>
+                        <input type="text" id="p-count" placeholder="Вес/Количество (1кг, 6шт)">
+                        
+                        <label>Категория:</label>
+                        <select id="p-cat">
+                            <option value="cakes">Торты</option>
+                            <option value="cookies">Печенье</option>
+                            <option value="croissants">Круассаны</option>
+                            <option value="desserts">Десерты</option>
+                            <option value="cupcakes">Капкейки</option>
+                            <option value="pies">Пироги</option>
+                            <option value="bread">Хлеб</option>
+                            <option value="drinks">Напитки</option>
+                            <option value="sauces">Соусы</option>
+                            <option value="sets">Сеты</option>
+                        </select>
 
-        // Проверяем авторизацию при загрузке
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            if (sessionStorage.getItem('admin_auth')) {
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('admin-content').style.display = 'block';
-                fetchList();
-            }
-        });
+                        <label>Тип изделия:</label>
+                        <select id="p-type">
+                            <option value="">Без уточнения</option>
+                            <option value="chocolate">🍫 Шоколадные</option>
+                            <option value="fruit">🍓 Фруктовые</option>
+                            <option value="cream">🧁 С кремом</option>
+                            <option value="seasonal">🎄 Сезонные</option>
+                            <option value="diet">🥗 Диетические</option>
+                        </select>
 
-        // Превью фото
+                        <label>Статус:</label>
+                        <select id="product-badge">
+                            <option value="">Без бейджа</option>
+                            <option value="hit">ХИТ 🔥</option>
+                            <option value="new">НОВИНКА ✨</option>
+                        </select>
+
+                        <label class="upload-area">
+                            <input type="file" id="p-file" accept="image/*" style="display:none;" onchange="showPreview(this)">
+                            <span id="upload-label">📸 Выбрать фото</span>
+                            <img id="img-preview">
+                        </label>
+
+                        <button type="submit" id="add-btn" class="btn-sm" style="width: 100%;">Опубликовать</button>
+                        <button type="button" id="cancel-edit" onclick="resetForm()" style="display:none; width: 100%; margin-top:10px; background:#333; border:none; color:white; border-radius:10px; height:40px;">Отмена</button>
+                    </form>
+
+                    <h3 style="margin-top: 40px; color:#ff9a8b; border-top: 1px solid #333; padding-top: 20px;">Список меню:</h3>
+                    
+                    <div class="admin-filters">
+                        <input type="text" id="admin-search" placeholder="🔍 Поиск по имени..." oninput="fetchList()">
+                        <select id="admin-filter-cat" onchange="fetchList()">
+                            <option value="all">Все категории</option>
+                            <option value="cakes">Торты</option>
+                            <option value="cookies">Печенье</option>
+                            <option value="croissants">Круассаны</option>
+                            <option value="desserts">Десерты</option>
+                            <option value="cupcakes">Капкейки</option>
+                            <option value="pies">Пироги</option>
+                            <option value="bread">Хлеб</option>
+                            <option value="drinks">Напитки</option>
+                            <option value="sauces">Соусы</option>
+                            <option value="sets">Сеты</option>
+                        </select>
+                    </div>
+
+                    <div id="product-list"></div>
+                </div>`;
+        }
+
         function showPreview(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -339,13 +244,11 @@
             }
         }
 
-        // Сохранение товара
         async function saveProduct(event) {
             event.preventDefault();
 
-            if (!sessionStorage.getItem('admin_auth')) {
-                alert("Сессия истекла! Войдите заново.");
-                logout();
+            if (!navigator.onLine) {
+                alert("Ошибка: Интернет отсутствует!");
                 return;
             }
 
@@ -353,24 +256,17 @@
             const fileInput = document.getElementById('p-file');
 
             if (!editId && !fileInput.files[0]) {
-                alert("Для нового товара загрузите фото!");
-                return;
-            }
-
-            // Проверка цены
-            const price = parseInt(document.getElementById('p-price').value);
-            if (price < 1 || price > 100000) {
-                alert("Цена должна быть от 1 до 100 000 рублей");
+                alert("Выберите фото!");
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> СОХРАНЕНИЕ...';
+            btn.innerText = "⏳ Загрузка...";
 
             try {
                 let imgUrl = null;
 
-                // Загружаем фото на imgbb
+                // Загрузка на ImgBB
                 if (fileInput.files[0]) {
                     const formData = new FormData();
                     formData.append("image", fileInput.files[0]);
@@ -388,57 +284,45 @@
                     }
                 }
 
-                // Собираем данные товара
                 const productData = {
                     name: document.getElementById('p-name').value,
                     price: document.getElementById('p-price').value,
-                    desc: document.getElementById('p-desc').value || '',
-                    count: document.getElementById('p-count').value || '',
+                    desc: document.getElementById('p-desc').value,
+                    count: document.getElementById('p-count').value,
                     cat: document.getElementById('p-cat').value,
-                    type: document.getElementById('p-type').value || '',
-                    badge: document.getElementById('product-badge').value || '',
-                    available: true,
-                    createdAt: Date.now()
+                    type: document.getElementById('p-type').value,
+                    badge: document.getElementById('product-badge').value,
+                    available: true
                 };
 
                 if (imgUrl) productData.img = imgUrl;
 
-                // Если редактируем, сохраняем существующее фото
-                if (editId && !imgUrl) {
-                    const existingImg = document.getElementById('img-preview').src;
-                    if (existingImg && existingImg.startsWith('http')) {
-                        productData.img = existingImg;
-                    }
-                }
-
-                // Сохраняем в Firebase
                 const dbRef = editId ? db.ref('products/' + editId) : db.ref('products').push();
                 await dbRef.set(productData);
 
-                alert(editId ? "Товар обновлен!" : "Товар добавлен!");
+                alert(editId ? "Обновлено успешно!" : "Изделие добавлено!");
                 resetForm();
                 fetchList();
 
-            } catch (error) {
-                console.error("Ошибка:", error);
-                alert("Ошибка сохранения: " + error.message);
+            } catch (e) {
+                console.error("Ошибка сохранения:", e);
+                alert("Ошибка: " + e.message);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<i class="fas fa-save"></i> СОХРАНИТЬ ТОВАР';
+                btn.innerText = "Опубликовать";
             }
         }
 
-        // Получение списка товаров
         function fetchList() {
-            db.ref('products').on('value', snapshot => {
+            db.ref('products').on('value', s => {
                 const container = document.getElementById('product-list');
                 const searchInput = document.getElementById('admin-search');
                 const filterCat = document.getElementById('admin-filter-cat');
 
-                const data = snapshot.val();
+                const data = s.val();
                 if (!container) return;
                 if (!data) {
-                    container.innerHTML = "<p style='text-align:center; opacity:0.5; padding:20px;'>Товаров пока нет</p>";
+                    container.innerHTML = "Пусто";
                     return;
                 }
 
@@ -460,108 +344,60 @@
 
                 container.innerHTML = filteredKeys.map(id => `
                     <div class="list-item">
-                        <div>
-                            <strong>${data[id].name}</strong>
-                            <div style="font-size: 0.9rem; opacity: 0.7;">
-                                ${data[id].price} ₽ • ${getCategoryName(data[id].cat)}
-                                ${data[id].type ? ' • ' + getTypeName(data[id].type) : ''}
-                                ${data[id].available === false ? ' • ❌ НЕТ В НАЛИЧИИ' : ''}
-                            </div>
-                        </div>
+                        <span style="${data[id].available === false ? 'text-decoration:line-through; opacity:0.5;' : ''}">
+                            ${data[id].name} (${data[id].price} ₸)
+                        </span>
                         <div class="admin-controls">
-                            <button class="btn-toggle" onclick="toggleAvailability('${id}', ${data[id].available !== false})">
-                                ${data[id].available === false ? 'Вкл' : 'Выкл'}
+                            <button style="color: #3498db;" onclick="editItem('${id}')">Ред.</button>
+                            <button style="color: #f1c40f;" onclick="toggleStock('${id}', ${data[id].available !== false})">
+                                ${data[id].available === false ? 'Вернуть' : 'Стоп'}
                             </button>
-                            <button class="btn-edit" onclick="editItem('${id}')">Ред.</button>
-                            <button class="btn-delete" onclick="deleteItem('${id}')">Удл.</button>
+                            <button class="btn-delete" onclick="deleteItem('${id}')">Удалить</button>
                         </div>
-                    </div>
-                `).join('');
+                    </div>`).join('');
             });
         }
 
-        function getCategoryName(cat) {
-            const categories = {
-                'cakes': 'Торты',
-                'cookies': 'Печенье',
-                'croissants': 'Круассаны',
-                'desserts': 'Десерты',
-                'cupcakes': 'Капкейки',
-                'pies': 'Пироги',
-                'bread': 'Хлеб',
-                'drinks': 'Напитки',
-                'sauces': 'Соусы',
-                'sets': 'Сеты'
-            };
-            return categories[cat] || cat;
-        }
-
-        function getTypeName(type) {
-            const types = {
-                'classic': '🍰',
-                'seasonal': '🍂',
-                'vegan': '🌱',
-                'glutenfree': '🌾',
-                'sugarfree': '🍬'
-            };
-            return types[type] || type;
-        }
-
         window.editItem = function(id) {
-            db.ref('products/' + id).once('value', snapshot => {
-                const p = snapshot.val();
-                if (!p) return;
-
+            db.ref('products/' + id).once('value', s => {
+                const p = s.val();
                 editId = id;
                 document.getElementById('p-name').value = p.name;
                 document.getElementById('p-price').value = p.price;
                 document.getElementById('p-desc').value = p.desc || '';
                 document.getElementById('p-count').value = p.count || '';
-                document.getElementById('p-cat').value = p.cat || '';
+                document.getElementById('p-cat').value = p.cat;
                 document.getElementById('p-type').value = p.type || '';
                 document.getElementById('product-badge').value = p.badge || '';
 
-                document.getElementById('form-title').innerText = "Редактирование товара";
-                document.getElementById('add-btn').innerHTML = '<i class="fas fa-save"></i> СОХРАНИТЬ ИЗМЕНЕНИЯ';
+                document.getElementById('form-title').innerText = "Редактирование";
+                document.getElementById('add-btn').innerText = "Сохранить изменения";
                 document.getElementById('cancel-edit').style.display = "block";
-
-                if (p.img) {
-                    document.getElementById('img-preview').src = p.img;
-                    document.getElementById('img-preview').style.display = 'block';
-                    document.getElementById('upload-label').style.display = 'none';
-                }
-
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
             });
-        };
+        }
 
         window.resetForm = function() {
             editId = null;
             document.getElementById('productForm').reset();
-            document.getElementById('form-title').innerText = "Добавить новый товар";
-            document.getElementById('add-btn').innerHTML = '<i class="fas fa-save"></i> СОХРАНИТЬ ТОВАР';
+            document.getElementById('form-title').innerText = "Новое изделие";
+            document.getElementById('add-btn').innerText = "Опубликовать";
             document.getElementById('cancel-edit').style.display = "none";
             document.getElementById('img-preview').style.display = "none";
             document.getElementById('upload-label').style.display = "block";
-        };
+        }
 
-        window.toggleAvailability = function(id, currentStatus) {
-            if (confirm("Изменить статус доступности?")) {
-                db.ref('products/' + id).update({
-                    available: !currentStatus
-                });
-            }
-        };
+        window.toggleStock = function(id, currentStatus) {
+            db.ref('products/' + id).update({
+                available: !currentStatus
+            });
+        }
 
         function deleteItem(id) {
-            if (confirm("Удалить этот товар? Это действие нельзя отменить!")) {
-                db.ref('products/' + id).remove()
-                    .then(() => alert("Товар удален"))
-                    .catch(err => alert("Ошибка удаления: " + err.message));
-            }
+            if (confirm("Удалить это изделие?")) db.ref('products/' + id).remove();
         }
     </script>
 </body>
