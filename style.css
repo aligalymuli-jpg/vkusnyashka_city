@@ -856,3 +856,99 @@ footer .wrapper {
     background: var(--primary);
     border-radius: 10px;
 }
+
+
+/* Информационный текст */
+
+.info-text {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.info-text p {
+    color: #ff9a8b;
+    margin: 10px 0;
+}
+
+
+/* Адаптивность для футера */
+
+@media (max-width: 768px) {
+    footer .wrapper>div {
+        flex-direction: column;
+        gap: 25px;
+        text-align: center;
+    }
+    .info-item {
+        justify-content: center;
+    }
+}
+
+
+/* Убрали лишние стили для иконок контактов в верхней панели */
+
+.contact-icons {
+    display: none;
+}
+
+.social-links {
+    display: none;
+}
+
+
+/* Стили для иконок внизу */
+
+.social-bottom-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-bottom-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.social-bottom-btn i {
+    color: white;
+}
+
+
+/* Информационный текст */
+
+.info-text {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.info-text p {
+    color: #ff9a8b;
+    margin: 10px 0;
+}
+
+
+/* Адаптивность для иконок */
+
+@media (max-width: 768px) {
+    .social-bottom-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-bottom-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
