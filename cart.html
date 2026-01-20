@@ -7,10 +7,11 @@
     <title>Корзина | Vkusnyashak City</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Marck+Script&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=1.1">
     <style>
         body {
             padding-bottom: 180px;
+            background: #0a0a0a;
         }
         
         .cart-header {
@@ -43,6 +44,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            transition: 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 154, 139, 0.2);
         }
         
         .cart-content {
@@ -61,6 +67,11 @@
             border: 1px solid rgba(255, 154, 139, 0.2);
             gap: 15px;
             backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+        
+        .cart-item:hover {
+            border-color: rgba(255, 154, 139, 0.5);
         }
         
         .cart-item img {
@@ -100,6 +111,15 @@
             border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .qty-btn:hover {
+            background: #ff6a88;
+        }
+        
+        .qty-btn:active {
+            transform: scale(0.9);
         }
         
         #total-box {
@@ -121,6 +141,43 @@
             margin-top: 100px;
             opacity: 0.5;
         }
+        
+        .cart-footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .cart-footer-links a {
+            color: white;
+            font-size: 1.3rem;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        
+        .cart-footer-links a:hover {
+            transform: scale(1.1);
+        }
+        
+        .wa-icon {
+            background: rgba(37, 211, 102, 0.2);
+        }
+        
+        .ig-icon {
+            background: rgba(228, 64, 95, 0.2);
+        }
+        
+        .gis-icon {
+            background: rgba(46, 139, 87, 0.2);
+        }
     </style>
 </head>
 
@@ -137,7 +194,14 @@
             <div style="font-family: 'Marck Script', cursive; font-size: 1.8rem; color: white;">
                 Корзина <span style="color: #ff9a8b;">Vkusnyashak</span>
             </div>
-            <div style="width: 70px;"></div>
+            <div class="cart-footer-links" style="gap: 10px;">
+                <a href="https://wa.me/77029994346" target="_blank" class="wa-icon" title="WhatsApp">
+                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                </a>
+                <a href="tel:+77029994346" title="Позвонить" style="background: rgba(255, 154, 139, 0.2);">
+                    <i class="fas fa-phone" style="color: #ff9a8b;"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -152,40 +216,71 @@
                     <span style="opacity: 0.7; font-size: 1rem;">Итоговая сумма:</span>
                     <span id="total-price" style="font-weight: 800; color: #ff9a8b; font-size: 1.8rem;">0 ₸</span>
                 </div>
-                <button onclick="sendOrder()" class="btn-sm" style="height: 65px; font-size: 1.1rem; border-radius: 18px;">
+
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(255, 154, 139, 0.1); border-radius: 12px;">
+                    <p style="font-size: 0.9rem; color: white; margin-bottom: 10px;">
+                        <i class="fas fa-info-circle" style="color: #ff9a8b;"></i> После подтверждения мы свяжемся с вами для уточнения деталей
+                    </p>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.7);">
+                        Работаем с 8:00 до 22:00 ежедневно
+                    </p>
+                </div>
+
+                <button onclick="sendOrder()" class="btn-sm" style="height: 65px; font-size: 1.1rem; border-radius: 18px; margin-bottom: 15px;">
                     <i class="fab fa-whatsapp" style="font-size: 1.4rem;"></i> Оформить через WhatsApp
                 </button>
+
+                <div class="cart-footer-links">
+                    <a href="https://wa.me/77029994346" target="_blank" class="wa-icon" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="https://www.instagram.com/vkusnyashka_city?igsh=MThvZ2x0YjdzMXg2NA==" target="_blank" class="ig-icon" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://2gis.kz/astana/geo/70000001082875952" target="_blank" class="gis-icon" title="2GIS">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </a>
+                </div>
+
+                <div style="text-align: center; margin-top: 15px;">
+                    <a href="tel:+77029994346" style="color: #ff9a8b; text-decoration: none; font-size: 0.9rem;">
+                        <i class="fas fa-phone"></i> Позвонить: +7 (702) 999-43-46
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
-            authDomain: "vkusnyashka-final.firebaseapp.com",
-            databaseURL: "https://vkusnyashka-final-default-rtdb.firebaseio.com"
-        };
-
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
+        // Локальные переменные для корзины
         let cart = [];
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем корзину из localStorage
             const cartData = localStorage.getItem('vkusnyashak_cart');
             cart = cartData ? JSON.parse(cartData) : [];
-            renderCart();
+
+            // Преобразуем цены в числа (на всякий случай)
+            cart.forEach(item => {
+                if (typeof item.price === 'string') {
+                    item.price = parseInt(item.price.replace(/\D/g, '')) || 0;
+                }
+            });
+
+            renderCartPage();
         });
 
-        window.renderCart = function() {
+        // Переименовал функцию, чтобы не было конфликта с main.js
+        function renderCartPage() {
             const container = document.getElementById('cart-content');
             const footer = document.getElementById('cart-footer');
 
-            if (cart.length === 0) {
+            if (!cart || cart.length === 0) {
                 container.innerHTML = `
                     <div class="empty-cart-msg">
                         <i class="fas fa-shopping-basket" style="font-size: 4rem; color: #ff9a8b; margin-bottom: 20px;"></i>
                         <p style="font-size: 1.2rem;">Корзина пуста</p>
-                        <a href="index.html" class="btn-sm" style="display: inline-block; margin-top: 30px;">
+                        <a href="index.html" class="btn-sm" style="display: inline-block; margin-top: 30px; padding: 15px 30px;">
                             Перейти в меню
                         </a>
                     </div>`;
@@ -198,7 +293,10 @@
             let total = 0;
 
             cart.forEach((item, index) => {
-                const itemTotal = item.price * item.qty;
+                // Преобразуем цену в число
+                const price = Number(item.price) || 0;
+                const qty = Number(item.qty) || 1;
+                const itemTotal = price * qty;
                 total += itemTotal;
 
                 container.innerHTML += `
@@ -206,30 +304,35 @@
                         <img src="${item.img || 'https://via.placeholder.com/70x70?text=Vkusnyashak'}">
                         <div style="flex-grow: 1;">
                             <h4>${item.name}</h4>
-                            <p>${item.price} ₸ × ${item.qty} = ${itemTotal} ₸</p>
+                            <p>${price} ₸ × ${qty} = ${itemTotal} ₸</p>
                         </div>
                         <div class="qty-controls">
-                            <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
-                            <span style="font-weight: bold;">${item.qty}</span>
-                            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                            <button class="qty-btn" onclick="changeQtyCart(${index}, -1)">-</button>
+                            <span style="font-weight: bold;">${qty}</span>
+                            <button class="qty-btn" onclick="changeQtyCart(${index}, 1)">+</button>
                         </div>
                     </div>`;
             });
 
             document.getElementById('total-price').innerText = `${total} ₸`;
-        };
+        }
 
-        window.changeQty = function(index, delta) {
+        // Функция изменения количества в корзине
+        function changeQtyCart(index, delta) {
             if (cart[index]) {
                 cart[index].qty += delta;
-                if (cart[index].qty <= 0) cart.splice(index, 1);
+                if (cart[index].qty <= 0) {
+                    cart.splice(index, 1);
+                }
+                // Сохраняем в localStorage
                 localStorage.setItem('vkusnyashak_cart', JSON.stringify(cart));
-                renderCart();
+                renderCartPage();
             }
-        };
+        }
 
+        // Функция отправки заказа
         window.sendOrder = function() {
-            if (cart.length === 0) {
+            if (!cart || cart.length === 0) {
                 alert("Корзина пуста!");
                 return;
             }
@@ -239,26 +342,37 @@
             text += "🎂 *СОСТАВ ЗАКАЗА:* 🎂\n\n";
 
             cart.forEach((item, index) => {
+                const price = Number(item.price) || 0;
+                const qty = Number(item.qty) || 1;
                 text += `${index + 1}. *${item.name}*\n`;
-                text += `   • ${item.qty} шт. x ${item.price} ₸ = ${item.price * item.qty} ₸\n`;
+                text += `   • ${qty} шт. x ${price} ₸ = ${price * qty} ₸\n`;
             });
 
-            let total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+            let total = cart.reduce((sum, item) => {
+                const price = Number(item.price) || 0;
+                const qty = Number(item.qty) || 1;
+                return sum + (price * qty);
+            }, 0);
+
             text += "\n==========================\n";
             text += `✅ *ИТОГО К ОПЛАТЕ: ${total} ₸*\n`;
             text += "==========================\n\n";
-            text += "🍪 _Спасибо за заказ! Пожалуйста, напишите адрес и телефон._ ✨";
+            text += "📝 *Пожалуйста, укажите:*\n";
+            text += "📍 Адрес доставки:\n";
+            text += "📞 Ваш телефон:\n\n";
+            text += "🍪 _Спасибо за заказ! Скоро свяжемся с вами для подтверждения._ ✨";
 
-            const phoneNumber = "77771234567";
+            const phoneNumber = "77029994346";
             const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(text)}`;
 
             window.open(waUrl, '_blank');
 
+            // Очищаем корзину после отправки
             cart = [];
             localStorage.setItem('vkusnyashak_cart', JSON.stringify(cart));
-            renderCart();
+            renderCartPage();
 
-            alert("Заказ отправлен! Ожидайте звонка.");
+            alert("Заказ отправлен! Мы свяжемся с вами в течение 15 минут.");
         };
     </script>
 </body>

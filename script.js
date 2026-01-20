@@ -327,6 +327,11 @@ window.renderCartModal = function() {
         if (footer) footer.style.display = 'none';
         return;
     }
+    cart.forEach(item => {
+        if (typeof item.price === 'string') {
+            item.price = parseInt(item.price.replace(/\D/g, '')) || 0;
+        }
+    });
 
     container.innerHTML = '';
     let total = 0;
@@ -424,7 +429,7 @@ window.confirmAndSendOrder = function() {
     text += `🍴 *ПРИБОРЫ:* ${persons} чел.\n\n`;
     text += "🍪 _Спасибо за заказ! Скоро свяжемся с вами._ ✨";
 
-    const phoneNumber = "77771234567";
+    const phoneNumber = "77029994346";
     const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(text)}`;
 
     window.open(waUrl, '_blank');

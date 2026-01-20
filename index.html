@@ -7,7 +7,7 @@
     <title>Vkusnyashak City | Кондитерская Алматы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.0">
+    <link rel="stylesheet" href="style.css?v=1.1">
 </head>
 
 <body>
@@ -27,6 +27,18 @@
         <nav>
             <div class="brand">Vkusnyashak City<span> 🍰</span></div>
             <div class="nav-controls">
+                <!-- Иконки контактов -->
+                <div class="contact-icons">
+                    <a href="https://wa.me/77029994346" target="_blank" class="nav-btn contact-icon" title="WhatsApp">
+                        <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                    </a>
+                    <a href="https://www.instagram.com/vkusnyashka_city?igsh=MThvZ2x0YjdzMXg2NA==" target="_blank" class="nav-btn contact-icon" title="Instagram">
+                        <i class="fab fa-instagram" style="color: #E4405F;"></i>
+                    </a>
+                    <a href="https://2gis.kz/astana/geo/70000001082875952" target="_blank" class="nav-btn contact-icon" title="2GIS">
+                        <i class="fas fa-map-marker-alt" style="color: #2E8B57;"></i>
+                    </a>
+                </div>
                 <a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i></a>
                 <div class="nav-btn" onclick="openCartModal()" style="cursor:pointer;">
                     <i class="fas fa-shopping-cart"></i>
@@ -82,10 +94,6 @@
                     <img src="img/cat_drinks.jpg" alt="Напитки">
                     <span>Напитки</span>
                 </button>
-                <button class="cat-btn" onclick="filterCat('sauces', this)">
-                    <img src="img/cat_sauces.jpg" alt="Соусы">
-                    <span>Соусы</span>
-                </button>
                 <button class="cat-btn" onclick="filterCat('sets', this)">
                     <img src="img/cat_sets.jpg" alt="Сеты">
                     <span>Сеты</span>
@@ -122,19 +130,96 @@
                 </div>
                 <div class="info-item">
                     <i class="fas fa-phone"></i>
-                    <p>+7 (777) 123-45-67</p>
+                    <p>+7 (702) 999-43-46</p>
                 </div>
                 <div class="social-links">
-                    <a href="https://wa.me/77771234567" class="social-icon wa" target="_blank">
+                    <a href="https://wa.me/77029994346" class="social-icon wa" target="_blank">
                         <i class="fab fa-whatsapp"></i>
                     </a>
-                    <a href="https://www.instagram.com/vkusnyashak_city" class="social-icon ig" target="_blank">
+                    <a href="https://www.instagram.com/vkusnyashka_city?igsh=MThvZ2x0YjdzMXg2NA==" class="social-icon ig" target="_blank">
                         <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://2gis.kz/astana/geo/70000001082875952" class="social-icon gis" target="_blank">
+                        <i class="fas fa-map-marked-alt"></i>
                     </a>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Футер с контактами -->
+    <footer style="background: rgba(10, 10, 10, 0.95); padding: 30px 20px; margin-top: 50px; border-top: 2px solid #ff9a8b;">
+        <div class="wrapper" style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px;">
+
+                <!-- Контакты -->
+                <div>
+                    <h3 style="color: #ff9a8b; font-size: 1.2rem; margin-bottom: 15px;">
+                        <i class="fas fa-phone-alt"></i> Контакты
+                    </h3>
+                    <div style="color: white; font-size: 0.95rem;">
+                        <p><strong>Телефон для заказов:</strong></p>
+                        <a href="tel:+77029994346" style="color: white; text-decoration: none; font-size: 1.1rem;">
+                            <i class="fab fa-whatsapp" style="color: #25D366;"></i> +7 (702) 999-43-46
+                        </a>
+                        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                            Звоните или пишите в WhatsApp
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Соцсети -->
+                <div>
+                    <h3 style="color: #ff9a8b; font-size: 1.2rem; margin-bottom: 15px;">
+                        <i class="fas fa-hashtag"></i> Соцсети
+                    </h3>
+                    <div style="display: flex; gap: 15px;">
+                        <a href="https://www.instagram.com/vkusnyashka_city?igsh=MThvZ2x0YjdzMXg2NA==" target="_blank" style="color: white; font-size: 1.8rem; transition: transform 0.3s;" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://2gis.kz/astana/geo/70000001082875952" target="_blank" style="color: white; font-size: 1.8rem; transition: transform 0.3s;" title="2GIS">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </a>
+                        <a href="https://wa.me/77029994346" target="_blank" style="color: white; font-size: 1.8rem; transition: transform 0.3s;" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 10px;">
+                        Подписывайтесь на нас!
+                    </p>
+                </div>
+
+                <!-- Адрес -->
+                <div>
+                    <h3 style="color: #ff9a8b; font-size: 1.2rem; margin-bottom: 15px;">
+                        <i class="fas fa-map-marker-alt"></i> Адрес
+                    </h3>
+                    <div style="color: white; font-size: 0.95rem;">
+                        <p><strong>Астана</strong></p>
+                        <p>Заказать можно онлайн</p>
+                        <p>Доставка по городу</p>
+                        <p>Самовывоз доступен</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Кнопка 2GIS -->
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="https://2gis.kz/astana/geo/70000001082875952" target="_blank" class="btn-sm" style="display: inline-flex; align-items: center; gap: 10px; padding: 15px 25px;">
+                    <i class="fas fa-map-marked-alt"></i> Найти нас в 2GIS
+                </a>
+            </div>
+
+            <!-- Копирайт -->
+            <div style="text-align: center; color: rgba(255,255,255,0.5); margin-top: 30px; font-size: 0.85rem;">
+                <p>© 2024 Vkusnyashak City. Все права защищены.</p>
+                <p style="margin-top: 10px;">Заказать: <a href="tel:+77029994346" style="color: #ff9a8b;">+7 (702) 999-43-46</a></p>
+                <p style="margin-top: 5px; font-size: 0.8rem;">С любовью к десертам!</p>
+            </div>
+
+        </div>
+    </footer>
 
     <!-- Модалка товара -->
     <div id="productModal" class="modal-overlay" onclick="closeModal(event)">
@@ -181,7 +266,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="script.js?v=1.0"></script>
+    <script src="script.js?v=1.1"></script>
 </body>
 
 </html>
