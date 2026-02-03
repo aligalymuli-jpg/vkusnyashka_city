@@ -7,7 +7,7 @@
     <title>Vkusnyashak City | Кондитерская Алматы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1.4">
+    <link rel="stylesheet" href="style.css?v=1.5">
 </head>
 
 <body>
@@ -172,9 +172,58 @@
             <span class="close-btn" onclick="closeCartModal()">&times;</span>
             <div class="modal-info">
                 <h2>Ваш заказ</h2>
+
+                <!-- Банер бесплатной доставки -->
+                <div id="free-delivery-banner" class="promo-banner" style="display: none;">
+                    🎉 <strong>БЕСПЛАТНАЯ ДОСТАВКА</strong> от 15,000 ₸!
+                </div>
+
                 <div id="cart-content"></div>
+
                 <div id="cart-footer">
-                    <div id="total-price"></div>
+                    <div id="discount-section" style="margin: 15px 0;">
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <input type="text" id="promo-code" placeholder="ПРОМОКОД" style="flex-grow: 1; padding: 12px; background: rgba(255,255,255,0.05); 
+                                      border: 1px solid rgba(255, 154, 139, 0.3); border-radius: 10px; color: white;">
+                            <button onclick="applyPromoCode()" style="background: var(--primary); color: white; 
+                                    border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer;">
+                                Применить
+                            </button>
+                        </div>
+                        <div id="promo-message" style="font-size: 0.9rem; margin-top: 5px;"></div>
+                    </div>
+
+                    <!-- Блок с расчетами -->
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Стоимость товаров:</span>
+                            <span id="products-price">0 ₸</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>Доставка:</span>
+                            <span id="delivery-price">Уточняйте в WhatsApp</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #2ecc71; font-weight: bold;">
+                            <span>Скидка:</span>
+                            <span id="discount-amount">0 ₸</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; 
+                                    border-top: 1px solid rgba(255,255,255,0.1); font-size: 1.2rem; font-weight: bold;">
+                            <span>К ОПЛАТЕ:</span>
+                            <span id="final-price">0 ₸</span>
+                        </div>
+                    </div>
+
+                    <!-- Прогресс до бесплатной доставки -->
+                    <div id="delivery-progress" class="delivery-progress" style="margin: 10px 0;">
+                        <div style="font-size: 0.9rem; margin-bottom: 5px;">
+                            До бесплатной доставки осталось: <span id="need-more">0</span> ₸
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+
                     <h3>Данные для доставки:</h3>
                     <input type="text" id="order-address" placeholder="Адрес доставки (Улица, дом, кв)">
                     <input type="tel" id="order-phone" placeholder="Ваш телефон">
@@ -185,15 +234,20 @@
                     <button onclick="confirmAndSendOrder()" class="btn-sm">
                         <i class="fab fa-whatsapp"></i> ПОДТВЕРДИТЬ В WHATSAPP
                     </button>
+                    <p style="font-size: 0.8rem; color: rgba(255,255,255,0.6); text-align: center; margin-top: 10px;">
+                        * Бесплатная доставка от 15,000 ₸
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- В конце body перед закрывающим тегом </body> -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="script.js?v=1.4"></script>
+    <script src="promo-system.js?v=1.0"></script>
+    <script src="script.js?v=1.6"></script>
 </body>
 
 </html>

@@ -16,6 +16,9 @@ const database = firebase.database();
 let products = [];
 let cart = JSON.parse(localStorage.getItem('vkusnyashak_cart')) || [];
 let currentCategory = 'all';
+let activePromoCode = null;
+const freeDeliveryThreshold = 15000; // Бесплатная доставка от 15000₸
+let currentOrderId = null;
 
 // Загрузка данных
 document.addEventListener('DOMContentLoaded', loadData);
@@ -36,7 +39,7 @@ async function loadData() {
         renderMenu();
 
     } catch (error) {
-        console.error("Ошибка загрузки данных:", error);
+        console.error("Ошибка загрузка данных:", error);
         hidePreloader();
     }
 }
@@ -188,7 +191,7 @@ window.openDetails = function(id) {
     document.getElementById('modalCount').innerText = p.count ? "🍴 " + p.count : "";
     document.getElementById('modalPrice').innerText = p.price + " ₸";
 
-    // Дополнительные товары (соусы к десертам)
+    // Дополнительные товары
     const upsellContainer = document.getElementById('upsell-container');
     upsellContainer.innerHTML = '';
 
@@ -264,7 +267,7 @@ window.addToCart = function(id, btnElement = null) {
     saveCart();
     updateUI();
 
-    if (document.getElementById('cart-content')) {
+    if (document.getElementById('cart-content') && document.getElementById('cartModal').style.display !== 'none') {
         renderCartModal();
     }
 
@@ -284,6 +287,10 @@ window.addToCart = function(id, btnElement = null) {
 
 // Показать уведомление
 function showNotification(message) {
+    // Удаляем старое уведомление если есть
+    const oldNotification = document.querySelector('.notification');
+    if (oldNotification) oldNotification.remove();
+
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.innerHTML = message;
@@ -311,6 +318,171 @@ function updateUI() {
     }
 }
 
+// Расчет итоговой суммы
+function calculateOrderTotal() {
+    let productsTotal = 0;
+
+    cart.forEach(item => {
+        if (typeof item.price === 'string') {
+            item.price = parseInt(item.price.replace(/\D/g, '')) || 0;
+        }
+        productsTotal += item.price * item.qty;
+    });
+
+    // Применяем скидку если есть промокод
+    let discount = 0;
+    if (activePromoCode) {
+        if (activePromoCode.type === 'percentage') {
+            discount = (productsTotal * activePromoCode.value) / 100;
+        } else if (activePromoCode.type === 'fixed') {
+            discount = activePromoCode.value;
+        }
+    }
+
+    // Итоговая сумма (БЕЗ доставки - доставку уточняют в WhatsApp)
+    let finalTotal = productsTotal - discount;
+
+    return {
+        productsTotal,
+        delivery: productsTotal >= freeDeliveryThreshold ? 0 : "уточняйте", // Для WhatsApp сообщения
+        discount,
+        finalTotal
+    };
+}
+
+// Функция применения промокода (модалка корзины)
+window.applyPromoCode = function() {
+        const codeInput = document.getElementById('promo-code');
+        const messageDiv = document.getElementById('promo-message');
+        const phoneInput = document.getElementById('order-phone');
+        const code = codeInput.value.trim().toUpperCase();
+
+        if (!code) {
+            messageDiv.innerHTML = '<span style="color: #e74c3c;">Введите промокод</span>';
+            return;
+        }
+
+        let userPhone = '';
+        if (phoneInput && phoneInput.value) {
+            userPhone = phoneInput.value;
+        }
+
+        // Тестовые промокоды
+        const promoCodes = [
+            { code: 'VKUSNYASHKA10', type: 'percentage', value: 10, active: true, usage: 'once' },
+            { code: 'SWEET500', type: 'fixed', value: 500, active: true, usage: 'once' },
+            { code: 'DESSERT20', type: 'percentage', value: 20, active: true, usage: 'multiple' },
+            { code: 'FIRSTORDER', type: 'percentage', value: 15, active: true, usage: 'once' },
+            { code: 'WELCOME10', type: 'percentage', value: 10, active: true, usage: 'once' }
+        ];
+
+        const promo = promoCodes.find(p => p.code === code && p.active === true);
+
+        if (!promo) {
+            activePromoCode = null;
+            messageDiv.innerHTML = '<span style="color: #e74c3c;">❌ Промокод не найден</span>';
+            return;
+        }
+
+        // Проверка для одноразовых промокодов
+        if (promo.usage === 'once' && userPhone) {
+            if (smartPromoSystem && !smartPromoSystem.canUsePromoCode(code, userPhone)) {
+                messageDiv.innerHTML = '<span style="color: #e74c3c;">❌ Вы уже использовали этот промокод</span>';
+                return;
+            }
+        }
+
+        activePromoCode = promo;
+        messageDiv.innerHTML = `
+        <span style="color: #2ecc71;">
+            ✅ Промокод "${code}" применен! 
+            ${promo.type === 'percentage' ? `Скидка ${promo.value}%` : `Скидка ${promo.value} ₸`}
+            ${promo.usage === 'once' ? ' (одноразовый)' : ' (многоразовый)'}
+        </span>
+        ${promo.usage === 'once' ? '<br><small style="color:#f39c12;">⚠️ Будет активирован после подтверждения заказа</small>' : ''}
+    `;
+    updateCartCalculations();
+    showNotification(`Промокод "${code}" успешно применен!`);
+};
+
+// Обновляем расчеты в модалке (ОБНОВЛЕННАЯ ВЕРСИЯ С ПРОГРЕССОМ)
+function updateCartCalculations() {
+    // Считаем только стоимость товаров
+    let productsTotal = 0;
+    cart.forEach(item => {
+        productsTotal += item.price * item.qty;
+    });
+    
+    // Применяем скидку если есть промокод
+    let discount = 0;
+    if (activePromoCode) {
+        if (activePromoCode.type === 'percentage') {
+            discount = productsTotal * (activePromoCode.value / 100);
+        } else if (activePromoCode.type === 'fixed') {
+            discount = activePromoCode.value;
+        }
+    }
+    
+    // Итоговая сумма (без доставки)
+    const finalTotal = productsTotal - discount;
+    
+    // Показываем/скрываем банер бесплатной доставки
+    const freeDeliveryBanner = document.getElementById('free-delivery-banner');
+    if (freeDeliveryBanner) {
+        freeDeliveryBanner.style.display = 'block';
+    }
+    
+    // ПРОГРЕСС ДО БЕСПЛАТНОЙ ДОСТАВКИ
+    const deliveryProgress = document.getElementById('delivery-progress');
+    const needMoreElement = document.getElementById('need-more');
+    const progressFill = document.getElementById('progress-fill');
+    
+    if (deliveryProgress && needMoreElement && progressFill) {
+        if (productsTotal < freeDeliveryThreshold) {
+            // Показываем прогресс если сумма меньше 15000
+            deliveryProgress.style.display = 'block';
+            const needMore = freeDeliveryThreshold - productsTotal;
+            const progressPercent = (productsTotal / freeDeliveryThreshold) * 100;
+            
+            needMoreElement.textContent = needMore;
+            progressFill.style.width = `${progressPercent}%`;
+        } else {
+            // Скрываем прогресс если достигли бесплатной доставки
+            deliveryProgress.style.display = 'none';
+        }
+    }
+    
+    // Обновляем цены в модалке
+    if (document.getElementById('products-price')) {
+        document.getElementById('products-price').innerText = `${productsTotal} ₸`;
+    }
+    
+    if (document.getElementById('delivery-price')) {
+        // Если сумма достигла 15000 - показываем бесплатно
+        if (productsTotal >= freeDeliveryThreshold) {
+            document.getElementById('delivery-price').innerHTML = 
+                '<span style="color: #2ecc71;">БЕСПЛАТНО 🎉</span>';
+        } else {
+            // Иначе показываем что уточняется в WhatsApp
+            document.getElementById('delivery-price').innerHTML = 
+                '<span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Уточняйте в WhatsApp</span>';
+        }
+    }
+    
+    if (document.getElementById('discount-amount')) {
+        document.getElementById('discount-amount').innerText = `${discount} ₸`;
+    }
+    
+    if (document.getElementById('final-price')) {
+        document.getElementById('final-price').innerText = `${finalTotal} ₸`;
+    }
+    
+    // Обновляем общую сумму
+    if (document.getElementById('total-price')) {
+        document.getElementById('total-price').innerText = `${finalTotal} ₸`;
+    }
+}
+
 // Рендер корзины в модалке
 window.renderCartModal = function() {
     const container = document.getElementById('cart-content');
@@ -327,6 +499,8 @@ window.renderCartModal = function() {
         if (footer) footer.style.display = 'none';
         return;
     }
+    
+    // Преобразуем цены в числа
     cart.forEach(item => {
         if (typeof item.price === 'string') {
             item.price = parseInt(item.price.replace(/\D/g, '')) || 0;
@@ -334,14 +508,13 @@ window.renderCartModal = function() {
     });
 
     container.innerHTML = '';
-    let total = 0;
-
+    
     cart.forEach((item, index) => {
-        total += item.price * item.qty;
-
         container.innerHTML += `
             <div class="cart-item" style="display: flex; align-items: center; background: rgba(255,255,255,0.05); margin-bottom: 10px; padding: 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); gap: 12px;">
-                <img src="${item.img}" style="width: 55px; height: 55px; border-radius: 10px; object-fit: cover;">
+                <img src="${item.img || 'https://via.placeholder.com/55x55?text=Vkusnyashak'}" 
+                     style="width: 55px; height: 55px; border-radius: 10px; object-fit: cover;"
+                     onerror="this.src='https://via.placeholder.com/55x55?text=Vkusnyashak'">
                 <div style="flex-grow: 1;">
                     <h4 style="font-size: 0.9rem; margin: 0;">${item.name}</h4>
                     <p style="color: #ff9a8b; font-size: 0.85rem; font-weight: bold; margin-top: 3px;">${item.price} ₸</p>
@@ -354,13 +527,11 @@ window.renderCartModal = function() {
             </div>`;
     });
 
-    const totalElem = document.getElementById('total-price');
-    if (totalElem) totalElem.innerText = `Итого: ${total} ₸`;
-
     if (footer) footer.style.display = 'block';
+    updateCartCalculations();
 };
 
-// Изменение количества
+// Изменение количества в модалке
 window.changeQty = function(index, delta) {
     cart[index].qty += delta;
     if (cart[index].qty <= 0) cart.splice(index, 1);
@@ -381,12 +552,27 @@ window.searchMenu = function() {
 
 // Открытие корзины
 window.openCartModal = function() {
+    if (cart.length === 0) {
+        showNotification("Корзина пуста!");
+        return;
+    }
     renderCartModal();
     document.getElementById('cartModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 };
 
 window.closeCartModal = function() {
+    // Если есть pending промокод и заказ не оформлен - отменяем
+    if (activePromoCode && smartPromoSystem) {
+        const phoneInput = document.getElementById('order-phone');
+        if (phoneInput && phoneInput.value) {
+            smartPromoSystem.cancelPromoPending(activePromoCode.code, phoneInput.value);
+            console.log(`Promo ${activePromoCode.code} cancelled - cart closed`);
+        }
+    }
+    
     document.getElementById('cartModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
 };
 
 // Оформление заказа
@@ -410,8 +596,21 @@ window.confirmAndSendOrder = function() {
         return;
     }
 
+    // Генерируем ID заказа
+    const orderId = 'ORD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    currentOrderId = orderId;
+    
+    // Если есть одноразовый промокод - отмечаем как pending
+    if (activePromoCode && activePromoCode.usage === 'once' && smartPromoSystem) {
+        smartPromoSystem.markPromoPending(activePromoCode.code, phone, orderId);
+    }
+
+    // Получаем расчеты
+    const calculation = calculateOrderTotal();
+    
     // Формирование сообщения
     let text = "🍰 *НОВЫЙ ЗАКАЗ VKUSNYASHAK CITY* 🍰\n";
+    text += `📋 *ID ЗАКАЗА:* ${orderId}\n`;
     text += "==========================\n";
     text += "🎂 *СОСТАВ ЗАКАЗА:* 🎂\n\n";
 
@@ -420,27 +619,72 @@ window.confirmAndSendOrder = function() {
         text += `   • ${item.qty} шт. x ${item.price} ₸ = ${item.price * item.qty} ₸\n`;
     });
 
-    let total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
     text += "\n==========================\n";
-    text += `✅ *ИТОГО К ОПЛАТЕ: ${total} ₸*\n`;
+    text += `💰 *СТОИМОСТЬ ТОВАРОВ:* ${calculation.productsTotal} ₸\n`;
+    
+    if (calculation.discount > 0 && activePromoCode) {
+        text += `🎫 *СКИДКА:* -${calculation.discount} ₸\n`;
+        text += `   (Промокод: ${activePromoCode.code})`;
+        if (activePromoCode.usage === 'once') {
+            text += ' (одноразовый)';
+        }
+        text += '\n';
+    }
+    
+    text += `\n✅ *ИТОГО К ОПЛАТЕ: ${calculation.finalTotal} ₸*\n`;
     text += "==========================\n\n";
     text += `📍 *АДРЕС:* ${address}\n`;
     text += `📞 *ТЕЛЕФОН:* ${phone}\n`;
-    text += `🍴 *ПРИБОРЫ:* ${persons} чел.\n\n`;
+    text += `🍴 *ПРИБОРЫ:* ${persons} чел.\n`;
+    text += `🆔 *ID ЗАКАЗА:* ${orderId}\n\n`;
+    
+    // Информация о доставке
+    if (calculation.productsTotal >= freeDeliveryThreshold) {
+        text += `🚚 *БЕСПЛАТНАЯ ДОСТАВКА АКТИВИРОВАНА! 🎉*\n`;
+    } else {
+        const needForFree = freeDeliveryThreshold - calculation.productsTotal;
+        text += `🚚 *Бесплатная доставка от 15,000 ₸*\n`;
+        text += `   (До бесплатной доставки осталось: ${needForFree} ₸)\n`;
+        text += `   (Стоимость доставки уточняйте у администратора)\n`;
+    }
+    
+    text += "⏰ *Время работы:* 9:00-21:00\n";
     text += "🍪 _Спасибо за заказ! Скоро свяжемся с вами._ ✨";
 
     const phoneNumber = "77029994346";
     const waUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(text)}`;
 
-    window.open(waUrl, '_blank');
+    // Открываем WhatsApp
+    const waWindow = window.open(waUrl, '_blank');
+    
+    // Подтверждаем промокод только если пользователь отправил сообщение
+    if (activePromoCode && activePromoCode.usage === 'once' && smartPromoSystem) {
+        setTimeout(() => {
+            if (!waWindow.closed) {
+                // Предполагаем что пользователь отправил сообщение
+                setTimeout(() => {
+                    smartPromoSystem.confirmPromoUsage(activePromoCode.code, phone, orderId);
+                    console.log(`Promo ${activePromoCode.code} confirmed for order ${orderId}`);
+                }, 15000); // 15 секунд на отправку
+            } else {
+                // Пользователь закрыл окно - отменяем pending
+                smartPromoSystem.cancelPromoPending(activePromoCode.code, phone);
+                console.log(`Promo ${activePromoCode.code} cancelled - WhatsApp closed`);
+            }
+        }, 5000);
+    }
 
     // Очистка корзины
     cart = [];
+    activePromoCode = null;
     saveCart();
     updateUI();
     closeCartModal();
 
-    showNotification("Заказ отправлен! Ожидайте звонка.");
+    // Показываем уведомление
+    setTimeout(() => {
+        showNotification("Заказ отправлен! Ожидайте звонка.");
+    }, 1000);
 };
 
 // Проверка статуса работы
@@ -458,7 +702,7 @@ function checkWorkStatus() {
     }
 }
 
-// Снежинки (декорация)
+// Снежинки
 function initSnow() {
     for (let i = 0; i < 30; i++) {
         setTimeout(() => {
@@ -481,3 +725,47 @@ function initSnow() {
         }, i * 200);
     }
 }
+
+// Дебаг функции для тестирования
+window.debugPromoStats = function() {
+    if (smartPromoSystem) {
+        const stats = smartPromoSystem.getStats();
+        console.log("📊 Promo Statistics:", stats);
+        alert(`📊 Статистика промокодов:
+Всего записей: ${stats.total}
+В процессе: ${stats.pending}
+Подтверждено: ${stats.confirmed}`);
+    } else {
+        alert("Система промокодов не загружена");
+    }
+};
+
+window.resetPromoForMe = function() {
+    const phone = prompt("Введите ваш телефон для сброса промокодов:");
+    if (phone && smartPromoSystem) {
+        const codes = ['VKUSNYASHKA10', 'SWEET500', 'FIRSTORDER', 'WELCOME10'];
+        codes.forEach(code => {
+            smartPromoSystem.resetPromoCode(code, phone);
+        });
+        alert("Все промокоды сброшены для вашего телефона!");
+    }
+};
+
+// Дополнительная проверка для модалки
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'cartModal') {
+        closeCartModal();
+    }
+});
+
+// Инициализация системы промокодов
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        if (typeof SmartPromoSystem !== 'undefined') {
+            smartPromoSystem = new SmartPromoSystem();
+            console.log("Smart promo system initialized in main script");
+        }
+    } catch(e) {
+        console.error("Error initializing promo system:", e);
+    }
+});
