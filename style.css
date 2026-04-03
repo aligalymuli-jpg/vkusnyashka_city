@@ -1,3 +1,4 @@
+/* ===== ПЕРЕМЕННЫЕ ===== */
 :root {
     --primary: #ff9a8b;
     --primary-gradient: linear-gradient(45deg, #ff9a8b, #ff6a88);
@@ -8,6 +9,7 @@
     --gradient-new: linear-gradient(45deg, #2ecc71, #27ae60);
 }
 
+/* ===== БАЗА ===== */
 * {
     margin: 0;
     padding: 0;
@@ -23,9 +25,7 @@ body {
     line-height: 1.6;
 }
 
-
-/* Видео фон - исправления для мобильных */
-
+/* ===== ВИДЕО ФОН ===== */
 #bg-video {
     position: fixed;
     top: 0;
@@ -36,16 +36,11 @@ body {
     z-index: -1;
     opacity: 0.4;
     pointer-events: none;
-    /* Исправление для iOS/Safari */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
-    /* Предотвращение растяжения на мобильных */
     min-width: 100%;
     min-height: 100%;
 }
-
-
-/* Для мобильных устройств */
 
 @media (max-width: 768px) {
     #bg-video {
@@ -58,19 +53,13 @@ body {
     }
 }
 
-
-/* Для очень маленьких экранов */
-
 @media (max-width: 480px) {
     #bg-video {
         height: 120vh;
-        /* Немного больше для компенсации */
     }
 }
 
-
-/* ПРЕЛОАДЕР */
-
+/* ===== ПРЕЛОАДЕР ===== */
 #preloader {
     position: fixed;
     top: 0;
@@ -121,14 +110,10 @@ body {
 }
 
 @keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
+    100% { transform: rotate(360deg); }
 }
 
-
-/* ШАПКА */
-
+/* ===== ШАПКА ===== */
 header {
     position: fixed;
     top: 0;
@@ -162,9 +147,9 @@ nav {
     align-items: center;
 }
 
+/* скрытые старые иконки контактов */
 .contact-icons {
-    display: flex;
-    gap: 8px;
+    display: none;
 }
 
 .nav-btn {
@@ -181,10 +166,6 @@ nav {
     border-radius: 50%;
     border: 1px solid var(--glass-border);
     transition: 0.3s;
-}
-
-.contact-icon {
-    background: rgba(255, 154, 139, 0.1);
 }
 
 .nav-btn:hover {
@@ -208,9 +189,7 @@ nav {
     font-weight: bold;
 }
 
-
-/* ГЕРОЙ */
-
+/* ===== ГЕРОЙ ===== */
 .hero {
     height: 60vh;
     display: flex;
@@ -238,9 +217,7 @@ nav {
     opacity: 0.9;
 }
 
-
-/* ОСНОВНОЙ КОНТЕНТ */
-
+/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
 .wrapper {
     max-width: 1200px;
     margin: 0 auto;
@@ -261,9 +238,7 @@ nav {
     font-weight: 600;
 }
 
-
-/* КАТЕГОРИИ */
-
+/* ===== КАТЕГОРИИ ===== */
 .categories {
     display: flex;
     flex-direction: column;
@@ -312,9 +287,7 @@ nav {
     transform: scale(0.97);
 }
 
-
-/* КНОПКА НАЗАД */
-
+/* ===== КНОПКА НАЗАД ===== */
 .back-btn {
     background: var(--primary);
     color: white;
@@ -329,9 +302,7 @@ nav {
     font-size: 0.9rem;
 }
 
-
-/* ПОИСК */
-
+/* ===== ПОИСК ===== */
 .search-container {
     max-width: 500px;
     margin: 0 auto 30px;
@@ -357,13 +328,10 @@ nav {
     background: rgba(255, 255, 255, 0.08);
     color: white;
     outline: none;
-    font-family: 'Montserrat', sans-serif;
     font-size: 0.9rem;
 }
 
-
-/* КАРТОЧКИ ТОВАРОВ */
-
+/* ===== КАРТОЧКИ ТОВАРОВ ===== */
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -494,9 +462,7 @@ nav {
     transform: scale(0.95);
 }
 
-
-/* ФИЛЬТРЫ ПО ТИПУ */
-
+/* ===== ФИЛЬТРЫ ПО ТИПУ ===== */
 #type-filters {
     display: flex;
     gap: 8px;
@@ -528,9 +494,7 @@ nav {
     background: rgba(255, 154, 139, 0.2);
 }
 
-
-/* МОДАЛЬНЫЕ ОКНА */
-
+/* ===== МОДАЛЬНЫЕ ОКНА (общие) ===== */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -542,7 +506,8 @@ nav {
     z-index: 5000;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(10px);
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .modal-card {
@@ -555,6 +520,7 @@ nav {
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
+    margin: auto;
 }
 
 .close-btn {
@@ -615,9 +581,7 @@ nav {
     font-weight: bold;
 }
 
-
-/* КОНТАКТЫ */
-
+/* ===== КОНТАКТЫ ===== */
 .info-card {
     background: var(--glass);
     padding: 30px;
@@ -647,39 +611,36 @@ nav {
     width: 24px;
 }
 
-.social-links {
+/* иконки соцсетей (новые, внизу) */
+.social-bottom-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.social-icon {
-    font-size: 2.5rem;
-    transition: 0.3s;
+    font-size: 1.5rem;
     color: white;
     text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.social-icon:hover {
+.social-bottom-btn:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-.wa {
-    color: #25d366;
+.social-bottom-btn i {
+    color: white;
 }
 
-.ig {
-    color: #e4405f;
+/* старые соц-иконки скрыты */
+.social-links {
+    display: none;
 }
 
-.gis {
-    color: #2E8B57;
-}
-
-
-/* КОРЗИНА В МОДАЛКЕ */
-
+/* ===== КОРЗИНА В МОДАЛКЕ ===== */
 #cart-footer {
     margin-top: 20px;
     padding-top: 20px;
@@ -734,33 +695,57 @@ nav {
     color: white;
 }
 
-
-/* ФУТЕР */
-
-footer {
-    background: rgba(10, 10, 10, 0.95);
-    padding: 30px 20px;
-    margin-top: 50px;
-    border-top: 2px solid #ff9a8b;
+/* ===== ПРОМОКОДЫ И СКИДКИ ===== */
+.promo-banner {
+    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 154, 139, 0.3);
+    animation: pulse 2s infinite;
 }
 
-footer .wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }
 
-
-/* СНЕЖИНКИ */
-
-@keyframes fall {
-    to {
-        transform: translateY(105vh);
-    }
+.delivery-progress {
+    margin: 10px 0;
 }
 
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
 
-/* УВЕДОМЛЕНИЯ */
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
 
+.discount-badge {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+/* ===== УВЕДОМЛЕНИЯ ===== */
 .notification {
     position: fixed;
     top: 100px;
@@ -777,405 +762,66 @@ footer .wrapper {
 }
 
 @keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
 }
 
+/* ===== ФУТЕР ===== */
+footer {
+    background: rgba(10, 10, 10, 0.95);
+    padding: 30px 20px;
+    margin-top: 50px;
+    border-top: 2px solid #ff9a8b;
+}
 
-/* АДАПТИВНОСТЬ */
+footer .wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
+/* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: 3.5rem;
-    }
-    .section-title {
-        font-size: 2rem;
-    }
-    .menu-grid {
-        grid-template-columns: 1fr;
-    }
-    .categories {
-        padding: 0 10px;
-    }
-    .cat-btn span {
-        font-size: 1rem;
-    }
-    .modal-card {
-        width: 95%;
-        border-radius: 20px;
-    }
-    .nav-controls {
-        gap: 5px;
-    }
-    .nav-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-    .brand {
-        font-size: 1.5rem;
-    }
-    footer .wrapper>div {
-        flex-direction: column;
-        gap: 25px;
-    }
-    .social-links {
-        margin-top: 20px;
-    }
+    .hero h1 { font-size: 3.5rem; }
+    .section-title { font-size: 2rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .categories { padding: 0 10px; }
+    .cat-btn span { font-size: 1rem; }
+    .modal-card { width: 95%; border-radius: 20px; }
+    .nav-controls { gap: 5px; }
+    .nav-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+    .brand { font-size: 1.5rem; }
+    footer .wrapper > div { flex-direction: column; gap: 25px; }
+    .info-item { justify-content: center; }
+    .social-bottom-btn { width: 45px; height: 45px; font-size: 1.3rem; }
 }
 
+@media (max-width: 480px) {
+    .social-bottom-btn { width: 40px; height: 40px; font-size: 1.2rem; }
+}
 
-/* СКРОЛЛБАР */
-
+/* ===== СКРОЛЛБАР ===== */
 ::-webkit-scrollbar {
     width: 5px;
 }
-
 ::-webkit-scrollbar-track {
     background: var(--dark);
 }
-
 ::-webkit-scrollbar-thumb {
     background: var(--primary);
     border-radius: 10px;
 }
 
-
-/* Информационный текст */
-
+/* ===== ДОПОЛНИТЕЛЬНЫЕ МЕЛОЧИ ===== */
 .info-text {
     text-align: center;
     margin-top: 15px;
 }
-
 .info-text p {
     color: #ff9a8b;
     margin: 10px 0;
-}
-
-
-/* Адаптивность для футера */
-
-@media (max-width: 768px) {
-    footer .wrapper>div {
-        flex-direction: column;
-        gap: 25px;
-        text-align: center;
-    }
-    .info-item {
-        justify-content: center;
-    }
-}
-
-
-/* Убрали лишние стили для иконок контактов в верхней панели */
-
-.contact-icons {
-    display: none;
-}
-
-.social-links {
-    display: none;
-}
-
-
-/* Стили для иконок внизу */
-
-.social-bottom-btn {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.social-bottom-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-}
-
-.social-bottom-btn i {
-    color: white;
-}
-
-
-/* Информационный текст */
-
-.info-text {
-    text-align: center;
-    margin-top: 15px;
-}
-
-.info-text p {
-    color: #ff9a8b;
-    margin: 10px 0;
-}
-
-
-/* Адаптивность для иконок */
-
-@media (max-width: 768px) {
-    .social-bottom-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .social-bottom-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-}
-
-
-/* Стили для промокодов и скидок */
-
-.promo-banner {
-    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 10px;
-    margin: 15px 0;
-    text-align: center;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(255, 154, 139, 0.3);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.delivery-progress {
-    margin: 10px 0;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 5px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
-    border-radius: 4px;
-    transition: width 0.5s ease;
-}
-
-.discount-badge {
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
-    color: white;
-    padding: 3px 10px;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    display: inline-block;
-    margin-left: 10px;
-}
-
-
-/* Уведомления */
-
-.notification {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background: linear-gradient(45deg, #ff9a8b, #ff6a88);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    z-index: 1001;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-
-/* Стили для промокодов и скидок */
-
-.promo-banner {
-    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 10px;
-    margin: 15px 0;
-    text-align: center;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(255, 154, 139, 0.3);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.02);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-.delivery-progress {
-    margin: 10px 0;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 5px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ff9a8b, #ff6a88);
-    border-radius: 4px;
-    transition: width 0.5s ease;
-}
-
-.discount-badge {
-    background: linear-gradient(45deg, #2ecc71, #27ae60);
-    color: white;
-    padding: 3px 10px;
-    border-radius: 15px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    display: inline-block;
-    margin-left: 10px;
-}
-
-
-/* Уведомления */
-
-.notification {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background: linear-gradient(45deg, #ff9a8b, #ff6a88);
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    z-index: 1001;
-    font-weight: 600;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    animation: slideIn 0.3s ease;
-    max-width: 300px;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-
-/* Фикс для модалки */
-
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    z-index: 5000;
-    align-items: center;
-    justify-content: center;
-    overflow-y: auto;
-    padding: 20px;
-}
-
-.modal-card {
-    background: #111;
-    width: 90%;
-    max-width: 450px;
-    border-radius: 30px;
-    border: 1px solid var(--primary);
-    overflow: hidden;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-    margin: auto;
 }

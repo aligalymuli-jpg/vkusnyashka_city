@@ -55,7 +55,6 @@ function hidePreloader() {
 function startHeavyAssets() {
     const video = document.getElementById('bg-video');
     if (video) video.load();
-    initSnow();
 }
 
 // Функции навигации
@@ -699,30 +698,6 @@ function checkWorkStatus() {
         badge.innerHTML = `<span style="color: #2ecc71;"><i class="fas fa-circle"></i> МЫ ОТКРЫТЫ</span>`;
     } else {
         badge.innerHTML = `<span style="color: #e74c3c;"><i class="fas fa-clock"></i> СЕЙЧАС ЗАКРЫТО</span>`;
-    }
-}
-
-// Снежинки
-function initSnow() {
-    for (let i = 0; i < 30; i++) {
-        setTimeout(() => {
-            const flake = document.createElement('div');
-            flake.innerHTML = '❄';
-            flake.style.cssText = `
-                position: fixed;
-                top: -20px;
-                left: ${Math.random() * 100}vw;
-                font-size: ${Math.random() * 15 + 10}px;
-                opacity: ${Math.random() * 0.5 + 0.3};
-                animation: fall ${Math.random() * 5 + 5}s linear forwards;
-                pointer-events: none;
-                z-index: 9998;
-                color: white;
-            `;
-            document.body.appendChild(flake);
-
-            setTimeout(() => flake.remove(), 7000);
-        }, i * 200);
     }
 }
 

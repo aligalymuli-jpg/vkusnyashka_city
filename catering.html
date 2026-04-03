@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Кейтеринг и банкеты | Vkusnyashka City</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=1.5">
+    <style>
+        /* Дополнительные стили только для этой страницы */
+        .catering-hero {
+            height: 50vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('img/catering-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 80px;
+        }
+        .catering-hero h1 {
+            font-family: 'Marck Script', cursive;
+            font-size: 3.5rem;
+            color: white;
+        }
+        .catering-content {
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+        .catering-content h2 {
+            color: var(--primary);
+            font-family: 'Marck Script', cursive;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .catering-content p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .catering-list {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        .catering-list li {
+            margin: 10px 0;
+            list-style-type: none;
+            position: relative;
+            padding-left: 25px;
+        }
+        .catering-list li:before {
+            content: "🍰";
+            position: absolute;
+            left: 0;
+        }
+        .contact-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            margin: 20px 0;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+        }
+        .contact-number:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 154, 139, 0.5);
+        }
+        .back-home {
+            display: inline-block;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .back-home:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div id="preloader">
+        <div class="loader-content">
+            <h2>Vkusnyashka City</h2>
+            <div class="spinner"></div>
+            <p>ЗАГРУЗКА...</p>
+        </div>
+    </div>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="bg-video.mp4" type="video/mp4">
+    </video>
+
+    <header>
+        <nav>
+            <div class="brand">Vkusnyashka City<span> 🍰</span></div>
+            <div class="nav-controls">
+                <a href="index.html" class="nav-btn"><i class="fas fa-home"></i></a>
+                <a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i></a>
+                <div class="nav-btn" onclick="window.location.href='index.html'" style="cursor:pointer;">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="catering-hero">
+        <div class="hero-content">
+            <h1>Кейтеринг & Банкеты</h1>
+            <div class="hero-line"></div>
+            <p>Сладкое настроение для вашего праздника</p>
+        </div>
+    </section>
+
+    <main class="wrapper">
+        <div class="catering-content">
+            <h2>Организуем выездное обслуживание</h2>
+            <p>Vkusnyashka City – это не просто кондитерская, это команда профессионалов, готовая сделать любое мероприятие незабываемым. Мы предлагаем полный спектр услуг для банкетов, фуршетов, свадеб, корпоративов и дней рождений.</p>
+            
+            <h2>Что мы предлагаем:</h2>
+            <ul class="catering-list">
+                <li>Индивидуальное составление меню под ваш бюджет и пожелания</li>
+                <li>Свадебные торты любой сложности (с доставкой и оформлением)</li>
+                <li>Капкейки, пирожные, печенье, круассаны – свежая выпечка в день мероприятия</li>
+                <li>Десертные столы (candy bar) – стильное оформление, которое понравится гостям</li>
+                <li>Безалкогольные напитки и сеты</li>
+                <li>Выездной кофе-брейк, фуршетные линии</li>
+            </ul>
+
+            <h2>Почему выбирают нас:</h2>
+            <ul class="catering-list">
+                <li>Работаем только из натуральных продуктов</li>
+                <li>Индивидуальный подход – мы учитываем ваши пожелания по дизайну и вкусам</li>
+                <li>Своевременная доставка и вежливый персонал</li>
+                <li>Гибкая система скидок для оптовых заказов</li>
+            </ul>
+
+            <p style="font-size: 1.2rem; font-weight: bold; margin: 30px 0;">Для консультации и заказа свяжитесь с нами по телефону/WhatsApp:</p>
+            
+            <a href="https://wa.me/77029994346" target="_blank" class="contact-number">
+                <i class="fab fa-whatsapp"></i> +7 (702) 999-43-46
+            </a>
+            <p>или позвоните нам: <strong>+7 (702) 999-43-46</strong></p>
+            <p style="margin-top: 30px;">Оставьте заявку – мы перезвоним вам в течение 15 минут и обсудим детали вашего идеального праздника!</p>
+            
+            <a href="index.html" class="back-home">
+                <i class="fas fa-arrow-left"></i> Вернуться в меню
+            </a>
+        </div>
+    </main>
+
+    <!-- Секция контактов как на главной (по желанию) -->
+    <section id="location" style="margin-top: 0;">
+        <div class="wrapper">
+            <h2 class="section-title">Контакты</h2>
+            <div class="info-card">
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>г.Астана Улица Кенжебек Кумисбеков, 2п</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <p>Ежедневно: 9:00 — 21:00</p>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <p>+7 (702) 999-43-46</p>
+                </div>
+                <div class="social-icons-bottom" style="margin-top: 30px; padding-top: 25px; border-top: 1px solid rgba(255, 154, 139, 0.2);">
+                    <div style="display: flex; justify-content: center; gap: 25px;">
+                        <a href="https://wa.me/77029994346" target="_blank" style="background:#25D366; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.6rem;"><i class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.instagram.com/vkusnyashka_city?igsh=MThvZ2x0YjdzMXg2NA==" target="_blank" style="background:#E1306C; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.6rem;"><i class="fab fa-instagram"></i></a>
+                        <a href="https://go.2gis.com/wuD5i" target="_blank" style="background:#00A82D; width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:900;">2GIS</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="promo-system.js?v=1.0"></script>
+    <script src="script.js?v=1.6"></script>
+    <script>
+        // Скрываем прелоадер после загрузки
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('preloader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 600);
+            }
+        });
+    </script>
+</body>
+</html>

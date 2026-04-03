@@ -144,6 +144,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="promo-system.js"></script>
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyCsbOVaSbdFKkxl4H3g1V5UJtYjhRN1mWs",
@@ -202,13 +203,12 @@
                         
                         <label>Категория:</label>
                         <select id="p-cat">
-                            <option value="cakes">Торты</option>
-                            <option value="cookies">Печенье</option>
-                            <option value="croissants">Круассаны</option>
-                            <option value="desserts">Десерты</option>
-                            <option value="cupcakes">Капкейки</option>
                             <option value="pies">Пироги</option>
-                            <option value="bread">Хлеб</option>
+                            <option value="cakes">Торты</option>
+                            <option value="sweet_pastry">сладкая выпечка</option>
+                            <option value="savory_pastry">выпечка</option>
+                            <option value="pastries">пирожные</option>
+                            <option value="cookies">Печенье</option>
                             <option value="drinks">Напитки</option>
                             <option value="sets">Сеты</option>
                         </select>
@@ -246,13 +246,12 @@
                         <input type="text" id="admin-search" placeholder="🔍 Поиск по имени..." oninput="fetchList()">
                         <select id="admin-filter-cat" onchange="fetchList()">
                             <option value="all">Все категории</option>
-                            <option value="cakes">Торты</option>
-                            <option value="cookies">Печенье</option>
-                            <option value="croissants">Круассаны</option>
-                            <option value="desserts">Десерты</option>
-                            <option value="cupcakes">Капкейки</option>
                             <option value="pies">Пироги</option>
-                            <option value="bread">Хлеб</option>
+                            <option value="cakes">Торты</option>
+                            <option value="sweet_pastry">сладкая выпечка</option>
+                            <option value="savory_pastry">выпечка</option>
+                            <option value="pastries">пирожные</option>
+                            <option value="cookies">Печенье</option>
                             <option value="drinks">Напитки</option>
                             <option value="sets">Сеты</option>
                         </select>
